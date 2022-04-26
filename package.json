@@ -24,6 +24,8 @@
     "postcss": "^8.4.12",
     "postcss-loader": "^6.2.1",
     "postcss-preset-env": "^7.4.3",
+    "prettier": "^2.6.2",
+    "prettier-plugin-tailwindcss": "^0.1.10",
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.0.24",
     "webpack": "^5.72.0",
@@ -31,7 +33,15 @@
     "webpack-dev-server": "^4.8.1"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.1",
+    "axios": "^0.27.1",
+    "framer-motion": "^6.3.2",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
-  }
+    "react-dom": "^18.0.0",
+    "react-icons": "^4.3.1",
+    "react-redux": "^8.0.1",
+    "react-router-dom": "^6.3.0",
+    "react-toastify": "^8.2.0"
+  },
+  "proxy": "http://localhost:5000"
 }
