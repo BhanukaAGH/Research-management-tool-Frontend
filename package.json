@@ -21,27 +21,36 @@
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "node-sass": "^7.0.1",
     "postcss": "^8.4.12",
     "postcss-loader": "^6.2.1",
     "postcss-preset-env": "^7.4.3",
     "prettier": "^2.6.2",
     "prettier-plugin-tailwindcss": "^0.1.10",
+    "sass-loader": "^12.6.0",
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.0.24",
+    "url-loader": "^4.1.1",
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.8.1"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/styled-engine": "^5.6.1",
     "@reduxjs/toolkit": "^1.8.1",
     "axios": "^0.27.1",
+    "dotenv": "^16.0.0",
     "framer-motion": "^6.3.2",
+    "notistack": "^2.0.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-icons": "^4.3.1",
     "react-redux": "^8.0.1",
-    "react-router-dom": "^6.3.0",
-    "react-toastify": "^8.2.0"
+    "react-router-dom": "^6.3.0"
   },
   "proxy": "http://localhost:5000"
 }
