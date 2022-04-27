@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { confirm } from 'react-confirm-box'
 import Register from './Sub components/Register'
+import { useNavigate } from 'react-router-dom'
 
 function UsersContent() {
   const [data, setData] = useState([])
   const [Uid, setUid] = useState([])
   const [registerUser, setRegisterUser] = useState(false)
-  
+  const navigate = useNavigate()
+
   useEffect(() => {
     axios
       .get('http://localhost:5000/users/list')
@@ -63,6 +65,9 @@ function UsersContent() {
     .then((json) => setData(json.data))
     
   }
+  const navigateto=()=>{
+    navigate('/dashboard')
+  }
 
 
   const renderTable = () => {
@@ -99,7 +104,8 @@ function UsersContent() {
           </td>
           <td class='px-6 py-4 text-right'>
             <a
-              href='#'
+              href=''
+              onClick={navigateto}
               class='font-medium text-blue-600 hover:underline dark:text-[#e2a500]'
             >
               Update
