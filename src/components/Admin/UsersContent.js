@@ -1,15 +1,52 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import { confirm } from "react-confirm-box";
 
  
+
 function UsersContent(){
   const [data, setData] = useState([])
+  const [Uid, setUid] = useState([])
+  
 
   useEffect(() => {
     axios.get('http://localhost:5000/users/list').then(json => setData(json.data))
   }, [])
 
+  
+  async function  HandleDelete(){//delete all from uid array
+    
+    if(Uid.length==0){//check if users selected to delete
+      console.log("no users selected")
+    }else{
+    const result = await confirm("Are you sure u want to remove all checked users ?");
+    if (result) {
+      const url = `http://localhost:5000/users/deletem/${Uid}`;
+    
+      axios.delete(url).then(response=>{
+        console.log(response);
+      })
+      window.location.reload();
+      
+    }else{
+      console.log("users not removed");
+    }}
+   
+  }
+  const handleUidchange = event => {//add object ids of selected checkboxes to Uid arrau
+    const { checked, value } = event.currentTarget;
+
+    setUid(
+      prev => checked
+        ? [...prev, value]
+        : prev.filter(val => val !== value)
+    );
+};
+  
+ 
   const renderTable = () => {
+    
+ 
     return data.map(user => {
       return (
       
@@ -17,7 +54,9 @@ function UsersContent(){
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-[#3a454b]">
                 <td class="w-4 p-4">
                     <div class="flex items-center">
-                        <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"></input>
+                    
+                        <input id={user._id} value={user._id} checked={Uid.some(val => val === user._id)} onChange={handleUidchange}  type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"></input>
+                    
                         <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
                     </div>
                 </td>
@@ -41,6 +80,7 @@ function UsersContent(){
         
       )
     })
+    
   }
   return (
     <div className='p-5 overflow-auto w-full h-full'>
@@ -60,7 +100,8 @@ function UsersContent(){
     </div>
     <div className='flex items-center justify-end'>
     <button type="button" class="focus:outline-none text-white bg-[#e2a500] hover:bg-yellow-500  font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 ">ADD User</button>
-    <button type="button" class="focus:outline-none text-white bg-[#e2a500] hover:bg-yellow-500  font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">Delete Users</button>
+    
+    <button onClick={HandleDelete} type="button" class="focus:outline-none text-white bg-[#e2a500] hover:bg-yellow-500  font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">Delete Users</button>
     </div>
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-[#e2a500] uppercase bg-[#3a454b] dark:bg-[#3a454b] dark:text-[#e2a500]">
@@ -104,12 +145,7 @@ function UsersContent(){
 
     
 }
-    
-
-
 // <tbody>{renderTable()}</tbody>
-
-
 
 export default UsersContent
 
