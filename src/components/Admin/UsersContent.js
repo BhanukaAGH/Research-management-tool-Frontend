@@ -7,7 +7,6 @@ function UsersContent() {
   const [data, setData] = useState([])
   const [Uid, setUid] = useState([])
   const [registerUser, setRegisterUser] = useState(false)
-
   useEffect(() => {
     axios
       .get('http://localhost:5000/users/list')
@@ -31,7 +30,10 @@ function UsersContent() {
         axios.delete(url).then((response) => {
           console.log(response)
         })
-        window.location.reload()
+        //to refresh the data
+        axios
+        .get('http://localhost:5000/users/list')
+        .then((json) => setData(json.data))
       } else {
         //console.log("users not removed");
         window.alert('Users Not removed')
@@ -46,6 +48,21 @@ function UsersContent() {
       checked ? [...prev, value] : prev.filter((val) => val !== value)
     )
   }
+  //filter users by role
+  const handleRoleChange = (e) => {
+    console.log(e.target.value)
+    var url;
+    if(e.target.value=='all'){
+        url='http://localhost:5000/users/list'
+    }else{
+       url = `http://localhost:5000/users/findby/${e.target.value}`
+    }
+    axios
+    .get(url)
+    .then((json) => setData(json.data))
+    
+  }
+
 
   const renderTable = () => {
     return data.map((user) => {
@@ -155,7 +172,16 @@ function UsersContent() {
                 Registration No.
               </th>
               <th scope='col' class='px-6 py-3'>
-                Role
+              <select  class="bg-[#3a454b] font-bold text-xs uppercase text-[#e2a500] dark:bg-[#3a454b] dark:text-[#e2a500]" id="cars"
+                onChange={handleRoleChange}
+              >
+                <option value="all">All Roles</option>
+                <option value="student">Students</option>
+                <option value="supervisor">Supervisor</option>
+                <option value="co_supervisor">Co-Supervisor</option>
+                <option value="panel_member">Panel Member</option>
+                <option value="admin">Admin</option>
+              </select>
               </th>
               <th scope='col' class='px-6 py-3'>
                 <span class='sr-only'>Edit</span>
