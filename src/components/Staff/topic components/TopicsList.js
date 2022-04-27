@@ -46,7 +46,7 @@ const TopicsList = () => {
                 <th className='truncate whitespace-normal px-6 py-4 font-medium text-gray-900'>
                   {topic.topicName}
                 </th>
-                <td className='px-6 py-4'>{topic.groupID || 'Group Id'}</td>
+                <td className='px-6 py-4'>{topic.groupId || 'Group Id'}</td>
                 <td className='px-6 py-4'>{topic.researchArea}</td>
                 <td className='px-6 py-4'>
                   {moment(topic.createdAt).format('YYYY/MM/DD')}

@@ -69,7 +69,7 @@ const DashboardSidebar = ({
   const [menus, setMenus] = useState([])
 
   useEffect(() => {
-    if (userType === 'Admin') {
+    if (userType === 'admin') {
       setMenus(AdminMenus)
     } else if (userType === 'Student') {
       setMenus(StudentMenus)
