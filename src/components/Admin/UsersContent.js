@@ -4,6 +4,8 @@ import { confirm } from "react-confirm-box";
 
  
 
+
+
 function UsersContent(){
   const [data, setData] = useState([])
   const [Uid, setUid] = useState([])
@@ -17,7 +19,8 @@ function UsersContent(){
   async function  HandleDelete(){//delete all from uid array
     
     if(Uid.length==0){//check if users selected to delete
-      console.log("no users selected")
+      //console.log("no users selected")
+      window.alert("Select Users to Remove")
     }else{
     const result = await confirm("Are you sure u want to remove all checked users ?");
     if (result) {
@@ -29,7 +32,8 @@ function UsersContent(){
       window.location.reload();
       
     }else{
-      console.log("users not removed");
+      //console.log("users not removed");
+      window.alert("Users Not removed")
     }}
    
   }
