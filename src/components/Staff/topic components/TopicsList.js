@@ -1,7 +1,27 @@
-import React from 'react'
-import topics from './dummydata'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import moment from 'moment'
+import {
+  getAllTopics,
+  selectTopic,
+  reset,
+} from '../../../features/topic/topicSlice'
+import Spinner from '../../Spinner'
 
-const TopicsList = ({ setSelectTopic }) => {
+const TopicsList = () => {
+  const dispatch = useDispatch()
+
+  const { topics, isLoading } = useSelector((state) => state.topic)
+
+  useEffect(() => {
+    dispatch(getAllTopics())
+    dispatch(reset())
+  }, [])
+
+  if (isLoading) {
+    return <Spinner />
+  }
+
   return (
     <div className='scrollbar max-h-full w-full overflow-auto scroll-smooth'>
       <table className='relative h-full w-full overflow-auto text-left text-sm text-gray-500'>
@@ -16,31 +36,36 @@ const TopicsList = ({ setSelectTopic }) => {
         </thead>
 
         <tbody>
-          {topics.map((topic, index) => (
-            <tr
-              className='cursor-pointer border-b bg-white hover:bg-gray-200'
-              key={index}
-              onClick={() => setSelectTopic(topic)}
-            >
-              <th className='truncate whitespace-normal px-6 py-4 font-medium text-gray-900'>
-                {topic.topic_name}
-              </th>
-              <td className='px-6 py-4'>{topic.groupID}</td>
-              <td className='px-6 py-4'>{topic.researchArea}</td>
-              <td className='px-6 py-4'>{topic.submitDate}</td>
-              <td className='px-6 py-4'>
-                <span
-                  className={`rounded  px-2.5 py-0.5 text-sm font-semibold  ${
-                    topic.status === 'approve'
-                      ? 'bg-green-200 text-green-800'
-                      : 'bg-red-200 text-red-800'
-                  }`}
-                >
-                  {topic.status}
-                </span>
-              </td>
-            </tr>
-          ))}
+          {topics &&
+            topics.map((topic, index) => (
+              <tr
+                className='cursor-pointer border-b bg-white hover:bg-gray-200'
+                key={index}
+                onClick={() => dispatch(selectTopic(topic))}
+              >
+                <th className='truncate whitespace-normal px-6 py-4 font-medium text-gray-900'>
+                  {topic.topicName}
+                </th>
+                <td className='px-6 py-4'>{topic.groupID || 'Group Id'}</td>
+                <td className='px-6 py-4'>{topic.researchArea}</td>
+                <td className='px-6 py-4'>
+                  {moment(topic.createdAt).format('YYYY/MM/DD')}
+                </td>
+                <td className='px-6 py-4'>
+                  <span
+                    className={`rounded  px-2.5 py-0.5 text-sm font-semibold  ${
+                      topic.status === 'approve'
+                        ? 'bg-green-200 text-green-800'
+                        : topic.status === 'reject'
+                        ? 'bg-red-200 text-red-800'
+                        : 'bg-blue-200 text-blue-800'
+                    }`}
+                  >
+                    {topic.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

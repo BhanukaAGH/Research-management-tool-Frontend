@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import SelectedTopic from './topic components/SelectedTopic'
 import TopicsList from './topic components/TopicsList'
+import { useSelector } from 'react-redux'
 
 const TopicRequest = () => {
-  const [selectTopic, setSelectTopic] = useState(null)
+  const { topic } = useSelector((state) => state.topic)
 
   return (
     <div className='h-full w-full overflow-auto p-5'>
-      {!selectTopic && <TopicsList setSelectTopic={setSelectTopic} />}
-      {selectTopic && <SelectedTopic setSelectTopic={setSelectTopic} />}
+      {!topic && <TopicsList />}
+      {topic && <SelectedTopic />}
     </div>
   )
 }
