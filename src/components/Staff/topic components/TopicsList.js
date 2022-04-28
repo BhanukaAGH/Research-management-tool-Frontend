@@ -15,8 +15,11 @@ const TopicsList = () => {
 
   useEffect(() => {
     dispatch(getAllTopics())
-    dispatch(reset())
   }, [])
+
+  useEffect(() => {
+    dispatch(reset())
+  }, [topics])
 
   if (isLoading) {
     return <Spinner />
