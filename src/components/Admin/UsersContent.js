@@ -63,6 +63,24 @@ function UsersContent() {
     .then((json) => setData(json.data))
     
   }
+  function search() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[3];//search users by coloumn 3 which is registration number
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }       
+    }
+  }
 
 
   const renderTable = () => {
@@ -134,9 +152,10 @@ function UsersContent() {
             </div>
             <input
               type='text'
-              id='table-search'
+              onKeyUp={search}
+              id="myInput"
               class='w-70 block rounded-lg border border-gray-300 bg-gray-50  p-2.5 pl-10 text-sm text-gray-900  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 '
-              placeholder='Search Users'
+              placeholder='Search By Reg No.'
             ></input>
           </div>
         </div>
@@ -157,7 +176,7 @@ function UsersContent() {
             Delete Users
           </button>
         </div>
-        <table class='w-full text-left text-sm text-gray-500 dark:text-gray-400'>
+        <table id="myTable" class='w-full text-left text-sm text-gray-500 dark:text-gray-400'>
           <thead class='bg-[#3a454b] text-xs uppercase text-[#e2a500] dark:bg-[#3a454b] dark:text-[#e2a500]'>
             <tr>
               <th scope='col' class='p-4'>
