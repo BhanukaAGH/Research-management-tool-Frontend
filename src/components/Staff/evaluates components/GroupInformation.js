@@ -1,5 +1,6 @@
 import React from 'react'
 import { MdOutlineAttachFile, MdKeyboardBackspace } from 'react-icons/md'
+import MarkingScheme from './MarkingScheme'
 
 const GroupInformation = ({ selectGroup, setSelectGroup }) => {
   return (
@@ -14,7 +15,7 @@ const GroupInformation = ({ selectGroup, setSelectGroup }) => {
         </div>
       </div>
 
-      <div className='overflow-hidden bg-white shadow sm:rounded-lg'>
+      <div className='mb-4 overflow-hidden bg-white shadow sm:rounded-lg'>
         <div className='px-4 py-5 sm:px-6'>
           <h3 className='text-lg font-medium leading-6 text-gray-900'>
             Research Information
@@ -120,6 +121,7 @@ const GroupInformation = ({ selectGroup, setSelectGroup }) => {
           </dl>
         </div>
       </div>
+      <MarkingScheme />
     </>
   )
 }
