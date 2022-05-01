@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack'
 import { register, reset } from '../../../features/auth/authSlice'
 import Spinner from '../../Spinner'
 
-const editUser = ({ setClickEdit }) => {
+const EditUser = ({ setClickEdit }) => {
   const [formData, setFormData] = useState({
     name: '',
     regNo: '',
@@ -185,4 +185,4 @@ const editUser = ({ setClickEdit }) => {
   )
 }
 
-  export default editUser;
+export default EditUser
