@@ -1,5 +1,5 @@
 import React from 'react'
-import GroupsData from './dummyGroups'
+import { groups } from './dummyGroups'
 
 const GroupsLists = ({ setSelectGroup }) => {
   return (
@@ -15,7 +15,7 @@ const GroupsLists = ({ setSelectGroup }) => {
         </thead>
 
         <tbody>
-          {GroupsData.map((group, index) => (
+          {groups.map((group, index) => (
             <tr
               className='cursor-pointer border-b bg-white hover:bg-gray-200'
               key={index}

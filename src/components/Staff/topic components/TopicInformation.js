@@ -54,7 +54,7 @@ const TopicInformation = () => {
             <dt className='text-sm font-medium text-gray-500'>Status</dt>
             <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
               <div className='flex items-center justify-between'>
-                {topic.status}
+                {topic.status.toUpperCase()}
                 <div className='space-x-2'>
                   <span
                     className='cursor-pointer rounded-md bg-blue-200 py-1  px-4 text-blue-500'
