@@ -1,57 +1,72 @@
 import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate } from "react-router";
 import { useSelector, useDispatch } from 'react-redux'
 import { useSnackbar } from 'notistack'
 import { register, reset } from '../../../features/auth/authSlice'
 import Spinner from '../../Spinner'
+import axios from 'axios';
 
-const EditUser = ({ setClickEdit }) => {
-  const [formData, setFormData] = useState({
+
+
+const EditUser = ({ setClickEdit,id }) => {
+  
+ //console.log(singleUser)
+  var [formData, setFormData] = useState({
     name: '',
     regNo: '',
     email: '',
-    userRole: '',
-    password: '',
-  })
+    role: ''
+  });
+  
 
-  const { name, regNo, email, password, userRole } = formData
 
-  const dispatch = useDispatch()
-  const { enqueueSnackbar } = useSnackbar()
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  )
+  
 
   useEffect(() => {
-    if (isError) {
-      enqueueSnackbar(message || 'user registration failed', {
-        variant: 'error',
-      })
-    }
+    async function userDetails(){
+      const url = `http://localhost:5000/users/find1/${id}`
+    
+      axios
+        .get(url)
+        .then((json) => setFormData(json.data))
+    }  
+    userDetails();
+    console.log("name of user",formData)
+ 
+   
+  }, [])
 
-    if (isSuccess) {
-      enqueueSnackbar('user registered', { variant: 'success' })
-      setClickEdit(false)
-    }
+  async function onSubmit() {
+   
+    const url = `http://localhost:5000/users/update1/${id}`
+    const name=formData.name
+    const regNo=formData.regNo
+    const email=formData.email
+    const role=formData.role
+    console.log("details",name,regNo,email,role)
 
-    dispatch(reset())
-  }, [user, isError, isSuccess, message, dispatch])
-
-  const onChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }))
+  
+    
+    axios.post(url,{
+        name: name,
+        regNo: regNo,
+        email: email,
+        role: role
+    }).then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    
+    setClickEdit(false)
+  
   }
+   // These methods will update the state properties.
 
-  const onSubmit = (e) => {
-    e.preventDefault()
-    dispatch(register(formData))
-  }
-
-  if (isLoading) {
-    return <Spinner />
-  }
+ 
+   
 
   return (
     <div className='absolute inset-0 z-[5] min-w-full overflow-y-auto'>
@@ -80,9 +95,10 @@ const EditUser = ({ setClickEdit }) => {
             </button>
             <div className='px-6 py-6 lg:px-8'>
               <h3 className='mb-4 text-xl font-medium text-gray-900'>
-                Add new user
+                Update User
               </h3>
-              <form className='space-y-6' onSubmit={onSubmit}>
+              
+              <form className='space-y-6' onSubmit={onSubmit} >
                 <div>
                   <label
                     htmlFor='name'
@@ -92,11 +108,14 @@ const EditUser = ({ setClickEdit }) => {
                   </label>
                   <input
                     type='text'
-                    name='name'
-                    value={name}
+                    defaultValue={formData.name}
+                    onChange={e=>setFormData({
+                      name:e.target.value,
+                      regNo:formData.regNo,
+                      email:formData.email,
+                      role:formData.role
+                    })}
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    placeholder='user name'
-                    onChange={onChange}
                   />
                 </div>
                 <div>
@@ -108,11 +127,15 @@ const EditUser = ({ setClickEdit }) => {
                   </label>
                   <input
                     type='text'
-                    name='regNo'
-                    value={regNo}
+                    defaultValue={formData.regNo}
+                    onChange={e=>setFormData({
+                      name:formData.name,
+                      regNo:e.target.value,
+                      email:formData.email,
+                      role:formData.role
+                    })}
+                    
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    placeholder='itxxxxxxxx'
-                    onChange={onChange}
                   />
                 </div>
                 <div>
@@ -124,11 +147,16 @@ const EditUser = ({ setClickEdit }) => {
                   </label>
                   <input
                     type='email'
-                    name='email'
-                    value={email}
-                    onChange={onChange}
+                    id='email'
+                    defaultValue={formData.email}
+                    onChange={e=>setFormData({
+                      name:formData.name,
+                      regNo:formData.regNo,
+                      email:e.target.value,
+                      role:formData.role
+                    })}
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    placeholder='itxxxxxxxx@my.sliit.lk'
+                    
                   />
                 </div>
                 <div>
@@ -139,42 +167,30 @@ const EditUser = ({ setClickEdit }) => {
                     Select an option
                   </label>
                   <select
-                    id='user_role'
+                    
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    name='userRole'
-                    value={userRole}
-                    onChange={onChange}
+                    defaultValue={formData.role}
+                    
+                    onChange={e=>setFormData({
+                      name:formData.name,
+                      regNo:formData.regNo,
+                      email:formData.email,
+                      role:e.target.value
+                    } )}
+                    
                   >
-                    <option defaultValue='student'>Select User role</option>
+                    <option defaultValue={formData.role}>{formData.role}</option>
                     <option value='student'>Student</option>
                     <option value='supervisor'>Supervisor</option>
                     <option value='co_supervisor'>Co-Supervisor</option>
                     <option value='panel_member'>Panel Member</option>
                   </select>
                 </div>
-
-                <div>
-                  <label
-                    htmlFor='password'
-                    className='mb-2 block text-sm font-medium text-gray-900'
-                  >
-                    User password
-                  </label>
-                  <input
-                    type='password'
-                    name='password'
-                    value={password}
-                    onChange={onChange}
-                    placeholder='password'
-                    className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                  />
-                </div>
-
                 <button
                   type='submit'
                   className='w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300'
                 >
-                  Create account
+                  Update account
                 </button>
               </form>
             </div>

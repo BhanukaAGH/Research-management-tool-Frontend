@@ -3,20 +3,42 @@ import axios from 'axios'
 import { confirm } from 'react-confirm-box'
 import Register from './Sub components/Register'
 import EditUser from './Sub components/EditUser'
-import { useNavigate } from 'react-router-dom'
+
+
+
 
 function UsersContent() {
   const [data, setData] = useState([])
   const [Uid, setUid] = useState([])
   const [clickEdit, setClickEdit] = useState(false) //state to display update
+  const [id, setid] = useState('')//to pass id to edit user
   const [registerUser, setRegisterUser] = useState(false)
-  const navigate = useNavigate()
+  
+  
 
-  useEffect(() => {
+
+
+//method to get data of single user for update purposes
+async function userDetails(Userid){
+  const url = `http://localhost:5000/users/find1/${Userid}`
+  axios
+    .get(url)
+    .then((json) => setsingleUser(json.data))
+}  
+  //method to refresh table upon every change
+  const tableList=()=>{
     axios
       .get('http://localhost:5000/users/list')
       .then((json) => setData(json.data))
+  }
+
+  useEffect(() => {
+    tableList();
+    
   }, [])
+
+  
+
 
   async function HandleDelete() {
     //delete all from uid array
@@ -34,11 +56,11 @@ function UsersContent() {
 
         axios.delete(url).then((response) => {
           console.log(response)
+          //to refresh the data
+          tableList();
         })
-        //to refresh the data
-        axios
-          .get('http://localhost:5000/users/list')
-          .then((json) => setData(json.data))
+        
+        
       } else {
         //console.log("users not removed");
         window.alert('Users Not removed')
@@ -65,10 +87,7 @@ function UsersContent() {
     axios.get(url).then((json) => setData(json.data))
   }
 
-  const navigateto = () => {
-    //naviaget to edit use
-    navigate('/editUser')
-  }
+
 
   function search() {
     var input, filter, table, tr, td, i, txtValue
@@ -123,12 +142,13 @@ function UsersContent() {
             {user.role}
           </td>
           <td class='px-6 py-4 text-right'>
-            <button
-              class='mr-2 mb-2 rounded-lg bg-[#e2a500]  px-5 py-2.5 text-sm font-medium text-white hover:bg-yellow-500 focus:outline-none'
-              onClick={() => setClickEdit(true)}
+            <a
+              class='font-medium text-blue-600 hover:underline dark:text-[#e2a500]'
+              onClick={() => {setClickEdit(true);setid(user._id);userDetails(user._id);}}
             >
               Update
-            </button>
+            </a>
+            
           </td>
         </tr>
       )
@@ -166,6 +186,7 @@ function UsersContent() {
             ></input>
           </div>
         </div>
+        
         <div className='flex items-center justify-end'>
           <button
             type='button'
@@ -174,7 +195,7 @@ function UsersContent() {
           >
             ADD User
           </button>
-
+         
           <button
             onClick={HandleDelete}
             type='button'
@@ -182,6 +203,9 @@ function UsersContent() {
           >
             Delete Users
           </button>
+        </div>
+        <div className='flex items-center justify-left'>
+            <button class="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5  dark:bg-yellow-200 dark:text-yellow-800 dark:hover:bg-yellow-300" onClick={tableList}>refresh Table</button>
         </div>
         <table
           id='myTable'
@@ -224,8 +248,9 @@ function UsersContent() {
           <tbody>{renderTable()}</tbody>
         </table>
       </div>
-      {clickEdit && <EditUser setClickEdit={setClickEdit} />}
-      {registerUser && <Register setRegisterUser={setRegisterUser} />}
+      {clickEdit && <EditUser  id={id} setClickEdit={setClickEdit} />}
+      {registerUser && <Register setRegisterUser={setRegisterUser}  />}
+      
     </div>
   )
 }
