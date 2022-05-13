@@ -86,7 +86,7 @@ async function DeletSubtype(name){
             class='mr-2 mb-2 rounded-lg bg-[#e2a500]  px-5 py-2.5 text-sm font-medium text-white hover:bg-yellow-500 focus:outline-none'
             onClick={() => {setClickEdit(true)}}
           >
-            ADD Submission
+            Create Submission Type
           </button>
         </div>
         <div className='flex items-center justify-left'>
