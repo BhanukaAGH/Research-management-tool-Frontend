@@ -8,7 +8,7 @@ const Home = () => {
     <div className='min-h-screen bg-gray-100'>
       <div className='relative'>
         <Navbar />
-        <main className='flex h-screen items-center justify-center bg-gray-100'>
+        <main className='flex h-[calc(100vh-52px)] items-center justify-center bg-gradient-to-r from-slate-400 via-slate-200 to-slate-400'>
           <div className='container flex flex-col items-center py-12'>
             <div className='mb-5 w-11/12 flex-col items-center justify-center sm:mb-10  sm:w-2/3'>
               <h1 className='text-center text-2xl font-black leading-7 text-gray-800 sm:text-3xl md:text-4xl md:leading-10 lg:text-5xl xl:text-6xl'>
