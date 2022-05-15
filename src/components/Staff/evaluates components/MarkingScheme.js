@@ -1,16 +1,67 @@
-import React, { useState } from 'react'
-import { schemes } from './dummyGroups'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  createEvaluation,
+  getEvaluation,
+  reset,
+} from '../../../features/evaluation/evaluationSlice'
+import Spinner from '../../Spinner'
 
-const MarkingScheme = () => {
-  const [markingScheme, setMarkingScheme] = useState(schemes)
+const MarkingScheme = ({ groupId, evaluateMark }) => {
+  const [markingScheme, setMarkingScheme] = useState(null)
+
+  const dispatch = useDispatch()
+  const { user } = useSelector((state) => state.auth)
+  const { evaluate, isLoading, isSuccess } = useSelector(
+    (state) => state.evaluate
+  )
 
   const calcTotal = () => {
-    const totalMarks = markingScheme.reduce((total, criteria) => {
-      total += Number(criteria.marks)
-      return total
-    }, 0)
+    if (markingScheme) {
+      const totalMarks =
+        markingScheme.reduce((total, criteria) => {
+          total += Number(criteria.marks)
+          return total
+        }, 0) || 0
 
-    return Math.round(totalMarks / markingScheme.length)
+      return Math.round(totalMarks / markingScheme.length)
+    }
+    return 0
+  }
+
+  useEffect(() => {
+    const data = {
+      groupId,
+      evaluationType: 'document',
+    }
+    dispatch(getEvaluation(data))
+    dispatch(reset())
+  }, [])
+
+  useEffect(() => {
+    if (evaluate) {
+      setMarkingScheme(
+        evaluate.markScheme.map((item) => ({ ...item, marks: item.marks || 0 }))
+      )
+    }
+  }, [isSuccess])
+
+  useEffect(() => {
+    const evaluationData = {
+      groupId,
+      evaluationType: 'document',
+      markScheme: markingScheme,
+      totalMark: calcTotal(),
+      evaluateBy: user.userId,
+    }
+    if (!evaluateMark && evaluationData !== evaluate) {
+      dispatch(createEvaluation(evaluationData))
+      console.log('Save')
+    }
+  }, [evaluateMark])
+
+  if (isLoading) {
+    return <Spinner />
   }
 
   return (
@@ -19,7 +70,8 @@ const MarkingScheme = () => {
         <thead className='bg-gray-50 text-xs uppercase text-gray-700'>
           <tr>
             <th className='border px-6 py-3'>Criteria</th>
-            <th className='border px-6 py-3'>Marks</th>
+            <th className='border px-6 py-3 text-center'>Allocated Marks</th>
+            <th className='border px-6 py-3 text-center'>Marks</th>
           </tr>
         </thead>
         <tbody>
@@ -29,16 +81,22 @@ const MarkingScheme = () => {
                 <th className='whitespace border px-6 py-4 font-normal text-gray-900'>
                   {scheme.criteria}
                 </th>
-                <td className='border'>
+                <th className='border px-6 py-4 text-center font-normal text-gray-900 lg:w-32'>
+                  {scheme.allocatedMark}
+                </th>
+                <td className='border lg:w-32'>
                   <input
                     type='number'
-                    value={markingScheme[index].marks}
-                    className='h-full w-full px-6  py-4 outline-none'
+                    value={scheme.marks}
+                    className={`h-full w-full px-6  py-4 text-center outline-none ${
+                      evaluateMark && 'bg-slate-700 text-white'
+                    }`}
+                    disabled={!evaluateMark}
                     onChange={(e) =>
-                      setMarkingScheme(
-                        schemes.map((item, i) => {
+                      setMarkingScheme((value) =>
+                        value.map((item, i) => {
                           if (i === index) {
-                            item.marks = e.target.value
+                            item.marks = Number(e.target.value)
                           }
                           return item
                         })
@@ -49,10 +107,13 @@ const MarkingScheme = () => {
               </tr>
             ))}
           <tr className='border-b bg-white'>
-            <th className='whitespace-nowrap border px-6 py-4 text-right font-medium uppercase text-gray-900'>
+            <th
+              className='whitespace-nowrap border px-8 py-4 text-right font-medium uppercase text-gray-900'
+              colSpan={2}
+            >
               Total
             </th>
-            <td className='border px-6 py-4'>{calcTotal()}</td>
+            <td className='border px-6 py-4 text-center'>{calcTotal()}</td>
           </tr>
         </tbody>
       </table>
