@@ -143,7 +143,7 @@ async function userDetails(Userid){
           </td>
           <td class='px-6 py-4 text-right'>
             <a
-              class='font-medium text-blue-600 hover:underline dark:text-[#e2a500]'
+              class='font-medium text-[#e2a500] hover:underline dark:text-[#e2a500]'
               onClick={() => {setClickEdit(true);setid(user._id);userDetails(user._id);}}
             >
               Update
