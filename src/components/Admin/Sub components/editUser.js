@@ -1,9 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from "react-router";
-import { useSelector, useDispatch } from 'react-redux'
-import { useSnackbar } from 'notistack'
-import { register, reset } from '../../../features/auth/authSlice'
-import Spinner from '../../Spinner'
 import axios from 'axios';
 
 
