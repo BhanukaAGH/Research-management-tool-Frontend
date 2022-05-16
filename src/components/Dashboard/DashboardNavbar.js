@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout, reset } from '../../features/auth/authSlice'
+import { toggleProfile } from '../../features/ui/uiSlice'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { AiOutlineMenu } from 'react-icons/ai'
 import { RiArrowDropDownLine } from 'react-icons/ri'
@@ -50,12 +51,15 @@ const DashboardNavbar = ({ setOpenSideBar }) => {
                 className='absolute right-0 z-30 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
                 role='menu'
               >
-                <Link
-                  to='/'
-                  className='block px-4 py-2 text-sm text-gray-700 hover:bg-[#e2a500]'
+                <span
+                  className='block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-[#e2a500]'
+                  onClick={() => {
+                    setOpenDropDown(false)
+                    dispatch(toggleProfile())
+                  }}
                 >
                   Your Profile
-                </Link>
+                </span>
                 <span
                   className='block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-[#e2a500]'
                   onClick={onLogout}
