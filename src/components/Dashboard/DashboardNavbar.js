@@ -13,7 +13,7 @@ const DashboardNavbar = ({ setOpenSideBar }) => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { user } = useSelector((state) => state.auth)
+  const { user } = useSelector((state) => state.user)
 
   const onLogout = () => {
     dispatch(logout())
@@ -36,7 +36,7 @@ const DashboardNavbar = ({ setOpenSideBar }) => {
           >
             <img
               className='h-10 w-10 rounded-full object-cover ring-2 ring-[#e2a500]'
-              src={UserImg}
+              src={UserImg && user && user.photoUrl}
               alt='user-profile'
             />
             <span className='hidden font-medium md:block'>

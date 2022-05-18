@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { toggleProfile } from '../features/ui/uiSlice'
+import { updateUserPicture, reset } from '../features/user/userSlice'
 import { MdClose, MdOutlineAddCircle } from 'react-icons/md'
 import { BiEdit } from 'react-icons/bi'
 import UserImage from '../assets/user.jpeg'
 import { motion } from 'framer-motion'
+import { useSnackbar } from 'notistack'
 
 const profileVariants = {
   hidden: {
@@ -25,11 +27,31 @@ const profileVariants = {
 
 const Profile = () => {
   const [editProfile, setEditProfile] = useState(false)
-  const [regNo, setRegNo] = useState('IT20009472')
-  const [name, setName] = useState('Hashan Bhanuka')
-  const [email, setEmail] = useState('it20009472@gmail.com')
+  const [prevImageUrl, setPrevImageUrl] = useState('')
 
+  const { enqueueSnackbar } = useSnackbar()
   const dispatch = useDispatch()
+  const { user, isSuccess, isError, message } = useSelector(
+    (state) => state.user
+  )
+
+  const updateProfileImage = (e) => {
+    setPrevImageUrl(user?.photoUrl)
+    dispatch(updateUserPicture(e.target.files[0]))
+  }
+
+  useEffect(() => {
+    if (isError) {
+      enqueueSnackbar(message, { variant: 'error' })
+    }
+    if (isSuccess && prevImageUrl !== user?.photoUrl) {
+      console.log('runnn')
+      enqueueSnackbar('update user image', { variant: 'success' })
+      setPrevImageUrl(user?.photoUrl)
+    }
+
+    dispatch(reset())
+  }, [isError, isSuccess, message, dispatch])
 
   return (
     <motion.div
@@ -57,22 +79,27 @@ const Profile = () => {
             />
             <div className='relative'>
               <img
-                src={UserImage}
+                src={UserImage && user?.photoUrl}
                 alt='user-image'
                 className='ring- mb-2 h-28 w-28 rounded-full border-2 border-[#e2a500] object-cover ring-4 ring-orange-100'
               />
               {editProfile && (
                 <div className='absolute bottom-3 right-2 -mr-2 cursor-pointer rounded-full bg-white text-3xl'>
-                  <label htmlFor='file-input' className='cursor-pointer'>
+                  <label htmlFor='image' className='cursor-pointer'>
                     <MdOutlineAddCircle />
                   </label>
-                  <input id='file-input' type='file' className='hidden' />
+                  <input
+                    id='image'
+                    type='file'
+                    className='hidden'
+                    onChange={updateProfileImage}
+                  />
                 </div>
               )}
             </div>
 
-            <h2 className='text-slate-800'>{name}</h2>
-            <span className='text-sm text-slate-500'>Supervisor</span>
+            <h2 className='text-slate-800'>{user?.name}</h2>
+            <span className='text-sm text-slate-500'>{user?.role}</span>
           </div>
           {/* User Details */}
           <div>
@@ -82,14 +109,9 @@ const Profile = () => {
               </span>
               <input
                 type='text'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className={`w-full ${
-                  editProfile
-                    ? 'rounded-md border border-gray-400 py-1 px-2 text-sm'
-                    : 'bg-transparent text-base font-medium text-blue-500'
-                }`}
-                disabled={!editProfile}
+                defaultValue={user?.name}
+                className='w-full bg-transparent text-base font-medium text-blue-500'
+                disabled={true}
               />
             </div>
             <div className='mb-4 flex flex-col'>
@@ -98,14 +120,9 @@ const Profile = () => {
               </span>
               <input
                 type='text'
-                value={regNo}
-                onChange={(e) => setRegNo(e.target.value)}
-                className={`w-full ${
-                  editProfile
-                    ? 'rounded-md border border-gray-400 py-1 px-2 text-sm'
-                    : 'bg-transparent text-base font-medium text-blue-500'
-                }`}
-                disabled={!editProfile}
+                defaultValue={user?.regNo}
+                className='w-full bg-transparent text-base font-medium text-blue-500'
+                disabled={true}
               />
             </div>
 
@@ -115,26 +132,13 @@ const Profile = () => {
               </span>
               <input
                 type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={`w-full ${
-                  editProfile
-                    ? 'rounded-md border border-gray-400 py-1 px-2 text-sm'
-                    : 'bg-transparent text-base font-medium text-blue-500'
-                }`}
-                disabled={!editProfile}
+                defaultValue={user?.email}
+                className='w-full bg-transparent text-base font-medium text-blue-500'
+                disabled={true}
               />
             </div>
           </div>
         </div>
-        {editProfile && (
-          <button
-            type='button'
-            className='ml-3 mt-2 rounded-lg bg-blue-700 px-4 py-2 text-center text-xs font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300'
-          >
-            Update
-          </button>
-        )}
       </div>
     </motion.div>
   )
