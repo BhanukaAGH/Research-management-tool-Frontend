@@ -1,8 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Submition from './submitions/Submition'
+import SubmitionsList from './submitions/SubmitionsList'
 
 const StudentSubmission = () => {
+  const [selectSubmition, setSelectSubmition] = useState(false)
+
   return (
-    <div className='h-full w-full overflow-auto p-5'>StudentSubmission</div>
+    <div className='h-full w-full overflow-auto p-5'>
+      {!selectSubmition && (
+        <SubmitionsList setSelectSubmition={setSelectSubmition} />
+      )}
+      {selectSubmition && (
+        <Submition
+          selectSubmition={selectSubmition}
+          setSelectSubmition={setSelectSubmition}
+        />
+      )}
+    </div>
   )
 }
 
