@@ -7,13 +7,11 @@ import Spinner from '../../Spinner'
 const Register = ({ setRegisterUser }) => {
   const [formData, setFormData] = useState({
     name: '',
-    regNo: '',
-    email: '',
     userRole: '',
     password: '',
   })
 
-  const { name, regNo, email, password, userRole } = formData
+  const { name, password, userRole } = formData
 
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
@@ -97,38 +95,6 @@ const Register = ({ setRegisterUser }) => {
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
                     placeholder='user name'
                     onChange={onChange}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor='regNo'
-                    className='mb-2 block text-sm font-medium text-gray-900'
-                  >
-                    Registration Number
-                  </label>
-                  <input
-                    type='text'
-                    name='regNo'
-                    value={regNo}
-                    className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    placeholder='itxxxxxxxx'
-                    onChange={onChange}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor='email'
-                    className='mb-2 block text-sm font-medium text-gray-900'
-                  >
-                    User email
-                  </label>
-                  <input
-                    type='email'
-                    name='email'
-                    value={email}
-                    onChange={onChange}
-                    className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    placeholder='itxxxxxxxx@my.sliit.lk'
                   />
                 </div>
                 <div>

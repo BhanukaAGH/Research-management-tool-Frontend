@@ -1,33 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { confirm } from 'react-confirm-box'
-import  CreateMS from './Sub components/CreateMS'
+import CreateMS from './Sub components/CreateMS'
 import AddCriteria from './Sub components/addCriteria'
 
 const MarkingScheme = () => {
   const [data, setData] = useState([])
   const [clickCreate, setclickCreate] = useState(false) //state to open create MS comonent
   const [clickCriteria, setclickCriteria] = useState(false) //state to open create criteria comonent
-  const [ms,setms]=useState(null)//set markscheme id
-  
-  
+  const [ms, setms] = useState(null) //set markscheme id
 
-
-  const cardList=()=>{
-    axios
-      .get('http://localhost:5000/markscheme/get')
-      .then((json) => {setData(json.data)
+  const cardList = () => {
+    axios.get('http://localhost:5000/markscheme/get').then((json) => {
+      setData(json.data)
       console.log(json.data)
-      })
+    })
   }
 
   useEffect(() => {
-    cardList();
-    
+    cardList()
   }, [])
 
   async function HandleDelete(id) {
-    console.log("Delete button works",id)
+    console.log('Delete button works', id)
 
     const result = await confirm(
       'Are you sure you want to remove this MarkScheme'
@@ -38,7 +33,7 @@ const MarkingScheme = () => {
       axios.delete(url).then((response) => {
         console.log(response)
         //to refresh the data
-        cardList();
+        cardList()
       })
     } else {
       //console.log("users not removed");
@@ -46,77 +41,95 @@ const MarkingScheme = () => {
     }
   }
 
- function test(){
-  console.log("button works",data)
-}
-
+  function test() {
+    console.log('button works', data)
+  }
 
   const renderCard = () => {
-    return data.map((ms) => {
+    return data.map((ms, index) => {
       //display details
       return (
-        <div >
-        <div  class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-        <a 
-         onClick={() => {setms(ms);setclickCriteria(true)}}
-        >
-          
-        <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">{ms.markSchemeName}</h5>
-  
-        <ul class="list-none">
-        
-          <li class="font-normal text-base text-gray-700 dark:text-gray-400">{ms.schemeType} </li>
-          <li class="font-normal text-base text-gray-700 dark:text-gray-400">{ms.Description}</li>
-          <li class="font-normal text-base text-gray-700 dark:text-gray-400"></li>
-          
-        </ul>
-        <br/>  
-        </a>
-        <button type="button" onClick={()=>{HandleDelete(ms._id)}} class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Remove</button>
+        <div key={index}>
+          <div className='block max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700'>
+            <a
+              onClick={() => {
+                setms(ms)
+                setclickCriteria(true)
+              }}
+            >
+              <h5 className='mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white'>
+                {ms.markSchemeName}
+              </h5>
+
+              <ul className='list-none'>
+                <li className='text-base font-normal text-gray-700 dark:text-gray-400'>
+                  {ms.schemeType}{' '}
+                </li>
+                <li className='text-base font-normal text-gray-700 dark:text-gray-400'>
+                  {ms.Description}
+                </li>
+                <li className='text-base font-normal text-gray-700 dark:text-gray-400'></li>
+              </ul>
+              <br />
+            </a>
+            <button
+              type='button'
+              onClick={() => {
+                HandleDelete(ms._id)
+              }}
+              className='mr-2 mb-2 rounded-full bg-red-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900'
+            >
+              Remove
+            </button>
+          </div>
         </div>
-      </div>
-       
       )
     })
   }
 
-
-
-
-
   return (
-  
-    <div className='p-5 overflow-auto w-full h-full'>MarkingScheme Managment
-    
-    <br/>
-    {clickCriteria && <AddCriteria  ms={ms} setms={setms} setclickCriteria={setclickCriteria} />}
+    <div className='h-full w-full overflow-auto p-5'>
+      MarkingScheme Managment
+      <br />
+      {clickCriteria && (
+        <AddCriteria
+          ms={ms}
+          setms={setms}
+          setclickCriteria={setclickCriteria}
+        />
+      )}
+      {!clickCriteria && (
+        <div>
+          <div className='flex items-center justify-center'>
+            <button
+              type='button'
+              className='mr-2 mb-2 rounded-lg bg-[#e2a500]  px-5 py-2.5 text-sm font-medium text-white hover:bg-yellow-500 focus:outline-none'
+              onClick={() => {
+                setclickCreate(true)
+              }}
+            >
+              Create Mark Scheme
+            </button>
+          </div>
+          <div className='justify-left flex items-center'>
+            <button
+              className='mr-2 bg-yellow-100 px-2.5 py-0.5 text-xs font-semibold text-yellow-800 hover:bg-yellow-200  dark:bg-yellow-200 dark:text-yellow-800 dark:hover:bg-yellow-300'
+              onClick={cardList}
+            >
+              refresh Cards
+            </button>
 
-   {!clickCriteria && ( <div>
-    <div className='flex items-center justify-center'>
-          <button
-            type='button'
-            class='mr-2 mb-2 rounded-lg bg-[#e2a500]  px-5 py-2.5 text-sm font-medium text-white hover:bg-yellow-500 focus:outline-none'
-            onClick={() => {setclickCreate(true)}}
-          >
-            Create Mark Scheme
-          </button>
+            <br />
+            <p className='text-sm dark:text-red-500'>
+              Click On MarkScheme to add criteria
+            </p>
+          </div>
+          <br />
+          <div className='grid grid-cols-4 gap-4'>{renderCard()}</div>
+          {clickCreate && <CreateMS setclickCreate={setclickCreate} />}
+        </div>
+      )}
     </div>
-    <div className='flex items-center justify-left'>
-            <button class="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5  dark:bg-yellow-200 dark:text-yellow-800 dark:hover:bg-yellow-300" onClick={cardList}>refresh Cards</button>
-      
-      <br/>
-      <p class="text-sm dark:text-red-500">Click On MarkScheme to add criteria</p>   
-    </div>
-    <br/>
-    <div class="grid grid-cols-4 gap-4">
-    {renderCard()}
-    </div>
-    {clickCreate && <CreateMS  setclickCreate={setclickCreate} />}
-    </div>)}
-    
-    </div>
-    
-  
   )
 }
 

@@ -1,67 +1,44 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios';
+import axios from 'axios'
 
-
-
-const EditUser = ({ setClickEdit,id }) => {
-  
- //console.log(singleUser)
+const EditUser = ({ setClickEdit, id }) => {
+  //console.log(singleUser)
   var [formData, setFormData] = useState({
     name: '',
-    regNo: '',
-    email: '',
-    role: ''
-  });
-  
-
-
-
-  
+    role: '',
+  })
 
   useEffect(() => {
-    async function userDetails(){
+    async function userDetails() {
       const url = `http://localhost:5000/users/find1/${id}`
-    
-      axios
-        .get(url)
-        .then((json) => setFormData(json.data))
-    }  
-    userDetails();
-    console.log("name of user",formData)
- 
-   
+
+      axios.get(url).then((json) => setFormData(json.data))
+    }
+    userDetails()
+    console.log('name of user', formData)
   }, [])
 
   async function onSubmit() {
-   
     const url = `http://localhost:5000/users/update1/${id}`
-    const name=formData.name
-    const regNo=formData.regNo
-    const email=formData.email
-    const role=formData.role
-    console.log("details",name,regNo,email,role)
+    const name = formData.name
+    const role = formData.role
+    console.log('details', name, role)
 
-  
-    
-    axios.post(url,{
+    axios
+      .post(url, {
         name: name,
-        regNo: regNo,
-        email: email,
-        role: role
-    }).then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-    
-    setClickEdit(false)
-  
-  }
-   // These methods will update the state properties.
+        role: role,
+      })
+      .then(function (response) {
+        console.log(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
 
- 
-   
+    setClickEdit(false)
+  }
+  // These methods will update the state properties.
 
   return (
     <div className='absolute inset-0 z-[5] min-w-full overflow-y-auto'>
@@ -92,8 +69,8 @@ const EditUser = ({ setClickEdit,id }) => {
               <h3 className='mb-4 text-xl font-medium text-gray-900'>
                 Update User
               </h3>
-              
-              <form className='space-y-6' onSubmit={onSubmit} >
+
+              <form className='space-y-6' onSubmit={onSubmit}>
                 <div>
                   <label
                     htmlFor='name'
@@ -104,54 +81,15 @@ const EditUser = ({ setClickEdit,id }) => {
                   <input
                     type='text'
                     defaultValue={formData.name}
-                    onChange={e=>setFormData({
-                      name:e.target.value,
-                      regNo:formData.regNo,
-                      email:formData.email,
-                      role:formData.role
-                    })}
+                    onChange={(e) =>
+                      setFormData({
+                        name: e.target.value,
+                        regNo: formData.regNo,
+                        email: formData.email,
+                        role: formData.role,
+                      })
+                    }
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor='regNo'
-                    className='mb-2 block text-sm font-medium text-gray-900'
-                  >
-                    Registration Number
-                  </label>
-                  <input
-                    type='text'
-                    defaultValue={formData.regNo}
-                    onChange={e=>setFormData({
-                      name:formData.name,
-                      regNo:e.target.value,
-                      email:formData.email,
-                      role:formData.role
-                    })}
-                    
-                    className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor='email'
-                    className='mb-2 block text-sm font-medium text-gray-900'
-                  >
-                    User email
-                  </label>
-                  <input
-                    type='email'
-                    id='email'
-                    defaultValue={formData.email}
-                    onChange={e=>setFormData({
-                      name:formData.name,
-                      regNo:formData.regNo,
-                      email:e.target.value,
-                      role:formData.role
-                    })}
-                    className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    
                   />
                 </div>
                 <div>
@@ -162,19 +100,20 @@ const EditUser = ({ setClickEdit,id }) => {
                     Select an option
                   </label>
                   <select
-                    
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
                     defaultValue={formData.role}
-                    
-                    onChange={e=>setFormData({
-                      name:formData.name,
-                      regNo:formData.regNo,
-                      email:formData.email,
-                      role:e.target.value
-                    } )}
-                    
+                    onChange={(e) =>
+                      setFormData({
+                        name: formData.name,
+                        regNo: formData.regNo,
+                        email: formData.email,
+                        role: e.target.value,
+                      })
+                    }
                   >
-                    <option defaultValue={formData.role}>{formData.role}</option>
+                    <option defaultValue={formData.role}>
+                      {formData.role}
+                    </option>
                     <option value='student'>Student</option>
                     <option value='supervisor'>Supervisor</option>
                     <option value='co_supervisor'>Co-Supervisor</option>
