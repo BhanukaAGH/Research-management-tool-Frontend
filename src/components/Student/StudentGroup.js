@@ -71,7 +71,7 @@ const StudentGroup = () => {
 
     // console.log(newEmployee);
     axios
-      .post('/api/v1/studentGroup/register', newGroup)
+      .post('/api/v1/student/groupRegister', newGroup)
       .then(() => {
         //swal('Added!', 'You have successfully added an employee', 'success')
         alert('Group added')
