@@ -51,7 +51,7 @@ const StaffChat = () => {
       <div>
         <div className='w-full'>
           <div className='scrollbar relative flex h-80 w-full items-end overflow-y-auto p-6'>
-            <ul className='w-full space-y-2 text-base font-normal'>
+            <ul className='h-full w-full space-y-2 text-base font-normal'>
               {chat &&
                 chat.map(({ uid, username, text, createAt }, index) => (
                   <li

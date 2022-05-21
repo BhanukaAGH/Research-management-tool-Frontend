@@ -1,17 +1,37 @@
-import React from 'react'
-import { MdOutlineAttachFile, MdKeyboardBackspace } from 'react-icons/md'
+import React, { useState } from 'react'
+import {
+  MdOutlineAttachFile,
+  MdKeyboardBackspace,
+  MdCheck,
+} from 'react-icons/md'
 import MarkingScheme from './MarkingScheme'
 
 const GroupInformation = ({ selectGroup, setSelectGroup }) => {
+  const [evaluateMark, setEvaluateMark] = useState(false)
+
   return (
     <>
-      <div className='mb-4 text-base'>
+      <div className='mb-4 flex justify-between text-base'>
         <div
-          className='flex max-w-fit cursor-pointer items-center space-x-2 rounded-md bg-gray-700 px-4 py-1 text-slate-50 duration-500 hover:scale-105 hover:shadow-lg hover:shadow-gray-600'
+          className='hover:scale-102 flex max-w-fit cursor-pointer items-center space-x-2 rounded-md bg-gray-700 px-4 py-1 text-slate-50 duration-500 hover:shadow-lg hover:shadow-gray-600'
           onClick={() => setSelectGroup(null)}
         >
           <MdKeyboardBackspace />
           <span>Back</span>
+        </div>
+        <div>
+          <button
+            className={`hover:scale-102 rounded-md py-1 text-slate-50 duration-500 hover:shadow-lg hover:shadow-gray-600 ${
+              evaluateMark ? 'bg-green-400 px-8' : 'bg-gray-700 px-4'
+            }`}
+            onClick={() => setEvaluateMark(!evaluateMark)}
+          >
+            {evaluateMark ? (
+              <MdCheck className='text-2xl text-gray-900' />
+            ) : (
+              'Evaluate Mark'
+            )}
+          </button>
         </div>
       </div>
 
@@ -121,7 +141,10 @@ const GroupInformation = ({ selectGroup, setSelectGroup }) => {
           </dl>
         </div>
       </div>
-      <MarkingScheme />
+      <MarkingScheme
+        groupId={selectGroup.groupID}
+        evaluateMark={evaluateMark}
+      />
     </>
   )
 }

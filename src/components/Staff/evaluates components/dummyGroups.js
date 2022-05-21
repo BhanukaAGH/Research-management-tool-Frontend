@@ -24,7 +24,7 @@ export const groups = [
     submitDate: '2022/04/25',
   },
   {
-    groupID: 'RESEARCH_G5',
+    groupID: '6277e0c532daf1f12c74e1f5',
     topic_name: 'How will technology change our lives in twenty years?',
     researchArea: '	INFORMATION TECHNOLOGY',
     submitDate: '2022/04/25',

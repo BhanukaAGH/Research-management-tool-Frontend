@@ -1,56 +1,43 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { useSnackbar } from 'notistack'
-import { register, reset } from '../../../features/auth/authSlice'
-import Spinner from '../../Spinner'
+import axios from 'axios'
 
-const Register = ({ setRegisterUser }) => {
-  const [formData, setFormData] = useState({
+const CreateSubType = ({ setClickEdit }) => {
+  //console.log(singleUser)
+  var [formData, setFormData] = useState({
     name: '',
-    userRole: '',
-    password: '',
+    dueDate: '',
+    type: '',
+    description: '',
   })
 
-  const { name, password, userRole } = formData
+  var [Name, setName] = useState('')
+  var [Type, setType] = useState('')
+  var [Date, setDate] = useState('')
+  var [Description, setDescription] = useState('')
 
-  const dispatch = useDispatch()
-  const { enqueueSnackbar } = useSnackbar()
+  async function onSubmit() {
+    console.log(formData)
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  )
+    const url = `http://localhost:5000/subtype/create`
 
-  useEffect(() => {
-    if (isError) {
-      enqueueSnackbar(message || 'user registration failed', {
-        variant: 'error',
+    //console.log("details",Name,Type,Date,Description)
+
+    axios
+      .post(url, {
+        name: Name,
+        dueDate: Date,
+        type: Type,
+        description: Description,
       })
-    }
+      .then(function (response) {
+        console.log(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
 
-    if (isSuccess) {
-      enqueueSnackbar('user registered', { variant: 'success' })
-      setRegisterUser(false)
-    }
-
-    dispatch(reset())
-  }, [user, isError, isSuccess, message, dispatch])
-
-  const onChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }))
+    setClickEdit(false)
   }
-
-  const onSubmit = (e) => {
-    e.preventDefault()
-    dispatch(register(formData))
-  }
-
-  if (isLoading) {
-    return <Spinner />
-  }
-
   return (
     <div className='absolute inset-0 z-[5] min-w-full overflow-y-auto'>
       <div className='relative flex h-full w-full items-center justify-center p-4'>
@@ -61,7 +48,7 @@ const Register = ({ setRegisterUser }) => {
             <button
               type='button'
               className='absolute top-3 right-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900'
-              onClick={() => setRegisterUser(false)}
+              onClick={() => setClickEdit(false)}
             >
               <svg
                 className='h-5 w-5'
@@ -78,7 +65,7 @@ const Register = ({ setRegisterUser }) => {
             </button>
             <div className='px-6 py-6 lg:px-8'>
               <h3 className='mb-4 text-xl font-medium text-gray-900'>
-                Add new user
+                Add new Submission type
               </h3>
               <form className='space-y-6' onSubmit={onSubmit}>
                 <div>
@@ -86,61 +73,68 @@ const Register = ({ setRegisterUser }) => {
                     htmlFor='name'
                     className='mb-2 block text-sm font-medium text-gray-900'
                   >
-                    User name
+                    Submission name
                   </label>
                   <input
                     type='text'
                     name='name'
-                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    placeholder='user name'
-                    onChange={onChange}
+                    placeholder='Research Presentation template'
                   />
                 </div>
+                <div>
+                  <label
+                    htmlFor='regNo'
+                    className='mb-2 block text-sm font-medium text-gray-900'
+                  >
+                    Due Date
+                  </label>
+                  <input
+                    type='text'
+                    name='dueDate'
+                    onChange={(e) => setDate(e.target.value)}
+                    className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
+                    placeholder='11/15/2022'
+                  />
+                </div>
+                <label
+                  for='message'
+                  className='mb-2 block text-sm font-medium text-gray-900'
+                >
+                  Description
+                </label>
+                <textarea
+                  id='message'
+                  rows='4'
+                  class='bg-white-50 dark:bg-white-700 dark:border-white-600 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:text-black dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+                  placeholder='Description...'
+                  onChange={(e) => setDescription(e.target.value)}
+                ></textarea>
                 <div>
                   <label
                     htmlFor='user_role'
                     className='mb-2 block text-sm font-medium text-gray-900'
                   >
-                    Select an option
+                    Select document type
                   </label>
                   <select
-                    id='user_role'
+                    id='type'
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    name='userRole'
-                    value={userRole}
-                    onChange={onChange}
+                    name='type'
+                    onChange={(e) => setType(e.target.value)}
                   >
-                    <option defaultValue='student'>Select User role</option>
-                    <option value='student'>Student</option>
-                    <option value='supervisor'>Supervisor</option>
-                    <option value='co_supervisor'>Co-Supervisor</option>
-                    <option value='panel_member'>Panel Member</option>
+                    <option defaultValue='student'>Select Type</option>
+                    <option value='.ppt'>ppt</option>
+                    <option value='.word'>word doc</option>
+                    <option value='.pdf'>pdf</option>
                   </select>
                 </div>
-
-                <div>
-                  <label
-                    htmlFor='password'
-                    className='mb-2 block text-sm font-medium text-gray-900'
-                  >
-                    User password
-                  </label>
-                  <input
-                    type='password'
-                    name='password'
-                    value={password}
-                    onChange={onChange}
-                    placeholder='password'
-                    className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                  />
-                </div>
-
                 <button
                   type='submit'
                   className='w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300'
                 >
-                  Create account
+                  Create Submission Type
                 </button>
               </form>
             </div>
@@ -151,4 +145,4 @@ const Register = ({ setRegisterUser }) => {
   )
 }
 
-export default Register
+export default CreateSubType

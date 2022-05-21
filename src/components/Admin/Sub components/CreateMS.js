@@ -1,56 +1,29 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { useSnackbar } from 'notistack'
-import { register, reset } from '../../../features/auth/authSlice'
-import Spinner from '../../Spinner'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 
-const Register = ({ setRegisterUser }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    userRole: '',
-    password: '',
-  })
+const CreateMS = ({ setclickCreate }) => {
+  var [Name, setName] = useState('')
+  var [Type, setType] = useState('')
+  var [Description, setDescription] = useState('')
 
-  const { name, password, userRole } = formData
+  async function onSubmit() {
+    const url = `http://localhost:5000/markscheme/create`
 
-  const dispatch = useDispatch()
-  const { enqueueSnackbar } = useSnackbar()
-
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  )
-
-  useEffect(() => {
-    if (isError) {
-      enqueueSnackbar(message || 'user registration failed', {
-        variant: 'error',
+    axios
+      .post(url, {
+        markSchemeName: Name,
+        schemeType: Type,
+        Description: Description,
       })
-    }
+      .then(function (response) {
+        console.log(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
 
-    if (isSuccess) {
-      enqueueSnackbar('user registered', { variant: 'success' })
-      setRegisterUser(false)
-    }
-
-    dispatch(reset())
-  }, [user, isError, isSuccess, message, dispatch])
-
-  const onChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }))
+    setclickCreate(false)
   }
-
-  const onSubmit = (e) => {
-    e.preventDefault()
-    dispatch(register(formData))
-  }
-
-  if (isLoading) {
-    return <Spinner />
-  }
-
   return (
     <div className='absolute inset-0 z-[5] min-w-full overflow-y-auto'>
       <div className='relative flex h-full w-full items-center justify-center p-4'>
@@ -61,7 +34,7 @@ const Register = ({ setRegisterUser }) => {
             <button
               type='button'
               className='absolute top-3 right-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900'
-              onClick={() => setRegisterUser(false)}
+              onClick={() => setclickCreate(false)}
             >
               <svg
                 className='h-5 w-5'
@@ -78,7 +51,7 @@ const Register = ({ setRegisterUser }) => {
             </button>
             <div className='px-6 py-6 lg:px-8'>
               <h3 className='mb-4 text-xl font-medium text-gray-900'>
-                Add new user
+                Create Marking Scheme
               </h3>
               <form className='space-y-6' onSubmit={onSubmit}>
                 <div>
@@ -86,61 +59,52 @@ const Register = ({ setRegisterUser }) => {
                     htmlFor='name'
                     className='mb-2 block text-sm font-medium text-gray-900'
                   >
-                    User name
+                    Marking Scheme name
                   </label>
                   <input
                     type='text'
                     name='name'
-                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    placeholder='user name'
-                    onChange={onChange}
+                    placeholder='Marking Scheme Name'
                   />
                 </div>
+                <label
+                  for='message'
+                  className='mb-2 block text-sm font-medium text-gray-900'
+                >
+                  Description
+                </label>
+                <textarea
+                  id='message'
+                  rows='4'
+                  class='bg-white-50 dark:bg-white-700 dark:border-white-600 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:text-black dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+                  placeholder='Description...'
+                  onChange={(e) => setDescription(e.target.value)}
+                ></textarea>
                 <div>
                   <label
                     htmlFor='user_role'
                     className='mb-2 block text-sm font-medium text-gray-900'
                   >
-                    Select an option
+                    Select document type
                   </label>
                   <select
-                    id='user_role'
+                    id='type'
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    name='userRole'
-                    value={userRole}
-                    onChange={onChange}
+                    name='type'
+                    onChange={(e) => setType(e.target.value)}
                   >
-                    <option defaultValue='student'>Select User role</option>
-                    <option value='student'>Student</option>
-                    <option value='supervisor'>Supervisor</option>
-                    <option value='co_supervisor'>Co-Supervisor</option>
-                    <option value='panel_member'>Panel Member</option>
+                    <option defaultValue='document'>Select Type</option>
+                    <option value='document'>Document</option>
+                    <option value='presentation'>Presentation</option>
                   </select>
                 </div>
-
-                <div>
-                  <label
-                    htmlFor='password'
-                    className='mb-2 block text-sm font-medium text-gray-900'
-                  >
-                    User password
-                  </label>
-                  <input
-                    type='password'
-                    name='password'
-                    value={password}
-                    onChange={onChange}
-                    placeholder='password'
-                    className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                  />
-                </div>
-
                 <button
                   type='submit'
                   className='w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300'
                 >
-                  Create account
+                  Create MarkingScheme
                 </button>
               </form>
             </div>
@@ -151,4 +115,4 @@ const Register = ({ setRegisterUser }) => {
   )
 }
 
-export default Register
+export default CreateMS

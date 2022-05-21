@@ -44,7 +44,7 @@ const Login = () => {
   }
 
   return (
-    <div className='flex min-h-screen items-center bg-white'>
+    <div className='flex min-h-screen items-center bg-gradient-to-r from-slate-400 via-slate-200 to-slate-400'>
       <div className='container mx-auto'>
         <div className='mx-auto mb-10 max-w-md'>
           <div className='flex flex-col items-center text-center'>
@@ -58,7 +58,7 @@ const Login = () => {
             </h1>
             <p className='text-gray-500'>Sign in to access your account</p>
           </div>
-          <div className='my-3 bg-gray-200 p-6'>
+          <div className='my-3 bg-slate-50 p-6'>
             <form action=''>
               <div className='mb-6'>
                 <label
