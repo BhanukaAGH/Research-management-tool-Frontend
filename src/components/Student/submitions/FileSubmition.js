@@ -1,10 +1,10 @@
 import React from 'react'
 
-const FileSubmition = () => {
+const FileSubmition = ({ setSelectFile }) => {
   return (
     <div className='flex w-full items-center justify-center'>
       <label
-        htmlFor='dropzone-file'
+        htmlFor='document'
         className='dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100'
       >
         <div className='flex flex-col items-center justify-center pt-5 pb-6'>
@@ -30,7 +30,12 @@ const FileSubmition = () => {
             You can drag and drop files here to add them.
           </p>
         </div>
-        <input id='dropzone-file' type='file' className='hidden' />
+        <input
+          id='document'
+          type='file'
+          className='hidden'
+          onChange={(e) => setSelectFile(e.target.files[0])}
+        />
       </label>
     </div>
   )
