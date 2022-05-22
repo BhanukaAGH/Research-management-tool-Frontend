@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  createEvaluation,
   getEvaluation,
   reset,
 } from '../../../features/evaluation/evaluationSlice'
 import Spinner from '../../Spinner'
 
-const MarkingScheme = ({ groupId, evaluateMark }) => {
+const MarkingScheme = ({ groupId, evaluateMark, setEvaluateData }) => {
   const [markingScheme, setMarkingScheme] = useState(null)
 
   const dispatch = useDispatch()
@@ -54,11 +53,8 @@ const MarkingScheme = ({ groupId, evaluateMark }) => {
       totalMark: calcTotal(),
       evaluateBy: user.userId,
     }
-    if (!evaluateMark && evaluationData !== evaluate) {
-      dispatch(createEvaluation(evaluationData))
-      console.log('Save')
-    }
-  }, [evaluateMark])
+    setEvaluateData(evaluationData)
+  }, [markingScheme])
 
   if (isLoading) {
     return <Spinner />
