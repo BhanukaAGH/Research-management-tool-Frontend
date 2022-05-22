@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import moment from 'moment'
 
 const EvaluateRaw = ({ setSelectGroup, submission }) => {
   const [groupDetails, setGroupDetails] = useState(null)
@@ -37,7 +38,9 @@ const EvaluateRaw = ({ setSelectGroup, submission }) => {
           </th>
           <td className='px-6 py-4'>{topicDetails.topicName}</td>
           <td className='px-6 py-4'>{topicDetails.researchArea}</td>
-          <td className='px-6 py-4'>{submission.updatedAt}</td>
+          <td className='px-6 py-4'>
+            {moment(submission.updatedAt).format('YYYY/MM/DD')}
+          </td>
         </tr>
       )}
     </>

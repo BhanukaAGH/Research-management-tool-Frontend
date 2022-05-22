@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { createEvaluation } from '../../../features/evaluation/evaluationSlice'
 import { saveAs } from 'file-saver'
+import moment from 'moment'
 import {
   MdOutlineAttachFile,
   MdKeyboardBackspace,
@@ -84,7 +85,7 @@ const GroupInformation = ({ selectGroup, setSelectGroup }) => {
             <div className='bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
               <dt className='text-sm font-medium text-gray-500'>Submit Date</dt>
               <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
-                {selectGroup.submission.updatedAt}
+                {moment(selectGroup.submission.updatedAt).format('YYYY/MM/DD')}
               </dd>
             </div>
             <div className='bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>

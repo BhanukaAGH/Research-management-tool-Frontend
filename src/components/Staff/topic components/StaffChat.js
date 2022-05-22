@@ -31,7 +31,6 @@ const StaffChat = () => {
         uid: user.userId,
         createAt: serverTimestamp(),
       })
-      enqueueSnackbar('message sent', { variant: 'success' })
     } else {
       enqueueSnackbar('please enter message', { variant: 'warning' })
     }
@@ -66,7 +65,7 @@ const StaffChat = () => {
                         <span className='block'>{text}</span>
                       </div>
                       <span className='block text-right text-xs text-gray-400'>
-                        {createAt && moment(createAt.toDate()).format('d MMM')}
+                        {createAt && moment(createAt.toDate()).format('DD MMM')}
                       </span>
                     </div>
                   </li>
