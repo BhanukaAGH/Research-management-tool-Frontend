@@ -33,28 +33,28 @@ const StudentGroups = () => {
           <td className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'>
             <ul>
               <li>{user.leader.name}</li>
-              <li>{user.leader.studentID}</li>
+              <li>{user.leader.regNo}</li>
               <li>{user.leader.email}</li>
             </ul>
           </td>
           <td className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'>
             <ul>
               <li>{user.member2.name}</li>
-              <li>{user.member2.studentID}</li>
+              <li>{user.member2.regNo}</li>
               <li>{user.member2.email}</li>
             </ul>
           </td>
           <td className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'>
             <ul>
               <li>{user.member3.name}</li>
-              <li>{user.member3.studentID}</li>
+              <li>{user.member3.regNo}</li>
               <li>{user.member3.email}</li>
             </ul>
           </td>
           <td className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'>
             <ul>
               <li>{user.member4.name}</li>
-              <li>{user.member4.studentID}</li>
+              <li>{user.member4.regNo}</li>
               <li>{user.member4.email}</li>
             </ul>
           </td>
