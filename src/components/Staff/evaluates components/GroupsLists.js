@@ -1,7 +1,21 @@
-import React from 'react'
-import { groups } from './dummyGroups'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { getAllSubmissions } from '../../../features/submission/submissionSlice'
+import Spinner from '../../Spinner'
+import EvaluateRaw from './EvaluateRaw'
 
 const GroupsLists = ({ setSelectGroup }) => {
+  const dispatch = useDispatch()
+  const { submissions, isLoading } = useSelector((state) => state.submission)
+
+  useEffect(() => {
+    dispatch(getAllSubmissions())
+  }, [])
+
+  if (isLoading) {
+    return <Spinner />
+  }
+
   return (
     <div className='scrollbar max-h-full w-full overflow-auto scroll-smooth'>
       <table className='relative h-full w-full overflow-auto text-left text-sm text-gray-500'>
@@ -15,19 +29,12 @@ const GroupsLists = ({ setSelectGroup }) => {
         </thead>
 
         <tbody>
-          {groups.map((group, index) => (
-            <tr
-              className='cursor-pointer border-b bg-white hover:bg-gray-200'
+          {submissions.map((submission, index) => (
+            <EvaluateRaw
               key={index}
-              onClick={() => setSelectGroup(group)}
-            >
-              <th className='truncate whitespace-normal px-6 py-4 font-medium text-gray-900'>
-                {group.groupID}{' '}
-              </th>
-              <td className='px-6 py-4'>{group.topic_name}</td>
-              <td className='px-6 py-4'>{group.researchArea}</td>
-              <td className='px-6 py-4'>{group.submitDate}</td>
-            </tr>
+              setSelectGroup={setSelectGroup}
+              submission={submission}
+            />
           ))}
         </tbody>
       </table>
