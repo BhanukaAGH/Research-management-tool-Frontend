@@ -3,11 +3,13 @@ import axios from 'axios'
 import moment from 'moment'
 
 const EvaluateRaw = ({ setSelectGroup, submission }) => {
+  const [loading, setLoading] = useState(false)
   const [groupDetails, setGroupDetails] = useState(null)
   const [topicDetails, setTopicDetails] = useState(null)
 
   useEffect(() => {
     const getDetails = async () => {
+      setLoading(true)
       const groupResponse = await axios.get(
         `/api/v1/student/${submission.submitUserId}`
       )
@@ -16,9 +18,29 @@ const EvaluateRaw = ({ setSelectGroup, submission }) => {
         `/api/v1/topic/group/${groupResponse.data.groupID}`
       )
       setTopicDetails(topicResponse.data)
+      setLoading(false)
     }
     getDetails()
   }, [])
+
+  if (loading) {
+    return (
+      <tr className='animate-pulse border-b bg-white'>
+        <th className='px-6 py-5'>
+          <div className='h-2 w-1/2 rounded-md bg-slate-300'></div>
+        </th>
+        <td className='px-6 py-5'>
+          <div className='h-2 w-1/2 rounded-md bg-slate-300'></div>
+        </td>
+        <td className='px-6 py-5'>
+          <div className='h-2 w-1/2 rounded-md bg-slate-300'></div>
+        </td>
+        <td className='px-6 py-5'>
+          <div className='h-2 w-1/2 rounded-md bg-slate-300'></div>
+        </td>
+      </tr>
+    )
+  }
 
   return (
     <>
