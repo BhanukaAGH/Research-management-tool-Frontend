@@ -4,7 +4,10 @@ import { useSnackbar } from 'notistack'
 import Spinner from '../../Spinner'
 import axios from 'axios'
 
+
 const Allocate = ({ setAllocate, groupID }) => {
+  const { enqueueSnackbar } = useSnackbar()
+
   const [group, setGroup] = useState([]) //set group details of seected group
   const [panel, setPanel] = useState([]) //store panel details
 
@@ -32,10 +35,10 @@ const Allocate = ({ setAllocate, groupID }) => {
     //console.log(res.status);
     if (res.status == 200) {
       //console.log("updated")
-      window.alert('updated refresh table')
+      enqueueSnackbar("Allocated", { variant: 'success' })
       setAllocate(false)
     } else {
-      window.alert('update failed')
+      enqueueSnackbar("Allocation Failed", { variant: 'error' })
       console.log('update failed')
     }
   }
