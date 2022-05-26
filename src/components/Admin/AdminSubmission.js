@@ -2,11 +2,17 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { confirm } from 'react-confirm-box'
 import CreateSubType from './Sub components/CreateSubType'
+import { useSnackbar } from 'notistack'
+
+
 
 const AdminSubmission = () => {
+  //
+  const { enqueueSnackbar } = useSnackbar()
+
   const [data, setData] = useState([])
   const [clickEdit, setClickEdit] = useState(false) //state to display add user
-  const [subID, setsubID] = useState('')
+  //const [subID, setsubID] = useState('')
 
   //
 
@@ -21,18 +27,22 @@ const AdminSubmission = () => {
     tableList()
   }, [])
 
-  async function DeletSubtype(name) {
+  async function DeletSubtype(name,subtypeID) {
     const result = await confirm('Confirm if you want to delete user: ' + name)
     if (result) {
-      const url = `http://localhost:5000/subtype/${subID}`
+      const url = `http://localhost:5000/subtype/${subtypeID}`
       axios.delete(url).then((response) => {
-        console.log(response)
+        console.log("delrespones",response)
         //to refresh the data
-        tableList()
-      })
+        enqueueSnackbar(response.data.msg, { variant: 'success' })
+        tableList();
+      }).catch(function (error) {
+        console.log("responseError",error.response.data.msg);
+        enqueueSnackbar(error.response.data.msg, { variant: 'error' })
+      });
     } else {
       //console.log("users not removed");
-      window.alert('SubType Not removed')
+      enqueueSnackbar("Submission type not deleted", { variant: 'info' })
     }
   }
 
@@ -67,8 +77,8 @@ const AdminSubmission = () => {
               href='#'
               className='text-bold font-medium text-[#ff0000] hover:underline  dark:text-[#ff0000]'
               onClick={() => {
-                setsubID(Submission._id)
-                DeletSubtype(Submission.name)
+                //setsubID(Submission._id)
+                DeletSubtype(Submission.name,Submission._id)
               }}
             >
               Delete

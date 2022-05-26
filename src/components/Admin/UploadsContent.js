@@ -155,13 +155,14 @@ const UploadsContent = () => {
         </div>
       </div>
       {/* <h3>Uploaded {progress}%</h3> */}
-      <p className="text-sm dark:text-red-500">
+      <p className="text-sm text-red-500">
         Click On File Name to Download
       </p>
       <div class="grid grid-cols-4 gap-4">
         {uploads.map((up) => {
           return (
             <div class="w-full rounded-lg border border-gray-200 bg-white bg-opacity-70 p-0.5 shadow-md ">
+              
               <div key={up.url} className="url">
                 <br />
                 <a href={up.url}>
