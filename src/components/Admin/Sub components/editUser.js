@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useSnackbar } from 'notistack'
 
 const EditUser = ({ setClickEdit, id }) => {
+  const { enqueueSnackbar } = useSnackbar()
   //console.log(singleUser)
   var [formData, setFormData] = useState({
     name: '',
@@ -22,18 +24,26 @@ const EditUser = ({ setClickEdit, id }) => {
     const url = `http://localhost:5000/users/update1/${id}`
     const name = formData.name
     const role = formData.role
-    console.log('details', name, role)
+    console.log('detailsss', name, role)
 
     axios
       .post(url, {
         name: name,
         role: role,
+
       })
       .then(function (response) {
-        console.log(response)
+        console.log("then",response)
+        if(response.data.msg==Updated){
+          enqueueSnackbar(response.data.msg, { variant: 'success' })
+        }else{
+          enqueueSnackbar(response.data.msg, { variant: 'error' })
+        }
+        
       })
       .catch(function (error) {
-        console.log(error)
+        console.log("err",error)
+        enqueueSnackbar(error.response.data.msg, { variant: 'info' })
       })
 
     setClickEdit(false)

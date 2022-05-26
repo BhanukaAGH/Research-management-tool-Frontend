@@ -3,8 +3,11 @@ import axios from 'axios'
 import { confirm } from 'react-confirm-box'
 import Register from './Sub components/Register'
 import EditUser from './Sub components/EditUser'
+import { useSnackbar } from 'notistack'
 
 function UsersContent() {
+  const { enqueueSnackbar } = useSnackbar()
+
   const [data, setData] = useState([])
   const [Uid, setUid] = useState([])
   const [clickEdit, setClickEdit] = useState(false) //state to display update
@@ -43,12 +46,19 @@ function UsersContent() {
 
         axios.delete(url).then((response) => {
           console.log(response)
+          setUid([])
+          enqueueSnackbar(response.data.msg, { variant: 'success' })
           //to refresh the data
           tableList()
-        })
+        }).catch(function (error) {
+          //console.log("responseError",error.response.data.msg);
+          setUid([])
+          enqueueSnackbar(error.data.msg, { variant: 'error' })
+        });
       } else {
         //console.log("users not removed");
-        window.alert('Users Not removed')
+        //window.alert('Users Not removed')
+        enqueueSnackbar("User/'s Not Removed", { variant: 'info' })
       }
     }
   }

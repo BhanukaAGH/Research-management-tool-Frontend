@@ -1,28 +1,42 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useSnackbar } from 'notistack'
 
 const CreateMS = ({ setclickCreate }) => {
+  const { enqueueSnackbar } = useSnackbar()
+
   var [Name, setName] = useState('')
   var [Type, setType] = useState('')
   var [Description, setDescription] = useState('')
 
+  //use react-hook-form
   async function onSubmit() {
     const url = `http://localhost:5000/markscheme/create`
 
-    axios
+    await axios
       .post(url, {
         markSchemeName: Name,
         schemeType: Type,
         Description: Description,
       })
       .then(function (response) {
-        console.log(response)
+        console.log("response",response);
+
+        enqueueSnackbar(response.data.msg, { variant: 'success' })
+
+
       })
       .catch(function (error) {
-        console.log(error)
+        console.log("error",error)
+        
+        enqueueSnackbar(error.response.data.msg, { variant: 'error' })
       })
-
-    setclickCreate(false)
+      
+        setclickCreate(false);
+      
+      
+      
+    
   }
   return (
     <div className='absolute inset-0 z-[5] min-w-full overflow-y-auto'>

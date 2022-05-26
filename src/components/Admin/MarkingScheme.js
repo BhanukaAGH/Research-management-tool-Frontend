@@ -120,7 +120,7 @@ const MarkingScheme = () => {
             </button>
 
             <br />
-            <p className='text-sm dark:text-red-500'>
+            <p className='text-sm text-red-500'>
               Click On MarkScheme to add criteria
             </p>
           </div>
