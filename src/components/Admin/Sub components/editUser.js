@@ -2,58 +2,58 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
 
-const EditUser = ({ setClickEdit, id }) => {
+
+const EditUser = ({ setClickEdit, id ,setData}) => {
   const { enqueueSnackbar } = useSnackbar()
   //console.log(singleUser)
   var [formData, setFormData] = useState({
     name: '',
     role: '',
   })
+  async function userDetails() {
+    const url = `http://localhost:5000/users/find1/${id}`
 
+    axios.get(url).then((json) => setFormData(json.data))
+    
+  }
   useEffect(() => {
-    async function userDetails() {
-      const url = `http://localhost:5000/users/find1/${id}`
-
-      axios.get(url).then((json) => setFormData(json.data))
-    }
     userDetails()
-    console.log('name of user', formData)
+    //console.log('name of user', formData)
   }, [])
 
   async function onSubmit() {
     const url = `http://localhost:5000/users/update1/${id}`
     const name = formData.name
     const role = formData.role
-    console.log('detailsss', name, role)
+    console.log('detailss', name, role)
 
     axios
       .post(url, {
         name: name,
         role: role,
-
       })
       .then(function (response) {
-        console.log("then",response)
-        if(response.data.msg==Updated){
-          enqueueSnackbar(response.data.msg, { variant: 'success' })
-        }else{
-          enqueueSnackbar(response.data.msg, { variant: 'error' })
-        }
+        console.log("then",response);
+        enqueueSnackbar(response.data.msg, { variant: 'success' });
         
       })
       .catch(function (error) {
         console.log("err",error)
-        enqueueSnackbar(error.response.data.msg, { variant: 'info' })
+        enqueueSnackbar(error.response.data.msg, { variant: 'error' })
       })
-
-    setClickEdit(false)
+      //update table
+      axios
+          .get('http://localhost:5000/users/list')
+          .then((json) => setData(json.data))
+      //close popup window
+      setClickEdit(false);
+    
   }
   // These methods will update the state properties.
 
   return (
     <div className='absolute inset-0 z-[5] min-w-full overflow-y-auto'>
       <div className='relative flex h-full w-full items-center justify-center p-4'>
-        <div className='absolute inset-0 bg-gray-800 bg-opacity-50 transition-opacity'></div>
 
         <div className=' w-full transform overflow-hidden rounded-lg  bg-white shadow-xl transition-all sm:my-8 sm:max-w-lg'>
           <div className='relative rounded-lg bg-white shadow'>
@@ -80,7 +80,7 @@ const EditUser = ({ setClickEdit, id }) => {
                 Update User
               </h3>
 
-              <form className='space-y-6' onSubmit={onSubmit}>
+              <form className='space-y-6' >
                 <div>
                   <label
                     htmlFor='name'
@@ -96,10 +96,14 @@ const EditUser = ({ setClickEdit, id }) => {
                         name: e.target.value,
                         regNo: formData.regNo,
                         email: formData.email,
+                        photoUrl:formData.photoUrl,
                         role: formData.role,
                       })
                     }
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
+                    name="name"
+                    id="name"
+                    
                   />
                 </div>
                 <div>
@@ -117,9 +121,13 @@ const EditUser = ({ setClickEdit, id }) => {
                         name: formData.name,
                         regNo: formData.regNo,
                         email: formData.email,
+                        photoUrl:formData.photoUrl,
                         role: e.target.value,
                       })
                     }
+                    name="role"
+                    id="role"
+                    
                   >
                     <option defaultValue={formData.role}>
                       {formData.role}
@@ -132,6 +140,7 @@ const EditUser = ({ setClickEdit, id }) => {
                 </div>
                 <button
                   type='submit'
+                  onClick={onSubmit}
                   className='w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300'
                 >
                   Update account

@@ -15,10 +15,10 @@ function UsersContent() {
   const [registerUser, setRegisterUser] = useState(false)
 
   //method to get data of single user for update purposes
-  async function userDetails(Userid) {
-    const url = `http://localhost:5000/users/find1/${Userid}`
-    axios.get(url).then((json) => setsingleUser(json.data))
-  }
+  // async function userDetails(Userid) {
+  //   const url = `http://localhost:5000/users/find1/${Userid}`
+  //   axios.get(url).then((json) => setsingleUser(json.data))
+  // }
   //method to refresh table upon every change
   const tableList = () => {
     axios
@@ -28,7 +28,7 @@ function UsersContent() {
 
   useEffect(() => {
     tableList()
-  }, [])
+  }, [data])
 
   async function HandleDelete() {
     //delete all from uid array
@@ -143,7 +143,7 @@ function UsersContent() {
               onClick={() => {
                 setClickEdit(true)
                 setid(user._id)
-                userDetails(user._id)
+                //userDetails(user._id)
               }}
             >
               Update
@@ -252,7 +252,7 @@ function UsersContent() {
           <tbody>{renderTable()}</tbody>
         </table>
       </div>
-      {clickEdit && <EditUser id={id} setClickEdit={setClickEdit} />}
+      {clickEdit && <EditUser id={id}  setData={setData} setClickEdit={setClickEdit} />}
       {registerUser && <Register setRegisterUser={setRegisterUser} />}
     </div>
   )
