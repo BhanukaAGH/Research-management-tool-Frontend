@@ -4,6 +4,7 @@ const initialState = {
   openProfile: false,
   submit: false,
   selectFile: null,
+  createTopicState: false,
 }
 
 export const uiSlice = createSlice({
@@ -19,9 +20,16 @@ export const uiSlice = createSlice({
     setSelectFile: (state, action) => {
       state.selectFile = action.payload
     },
+    setCreateTopic: (state, action) => {
+      state.createTopicState = action.payload
+    },
   },
 })
 
-export const { toggleProfile, submitSubmission, setSelectFile } =
-  uiSlice.actions
+export const {
+  toggleProfile,
+  submitSubmission,
+  setSelectFile,
+  setCreateTopic,
+} = uiSlice.actions
 export default uiSlice.reducer

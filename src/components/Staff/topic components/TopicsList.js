@@ -14,6 +14,7 @@ const TopicsList = () => {
   const { topics, isLoading, isSuccess, isError } = useSelector(
     (state) => state.topic
   )
+  const { user } = useSelector((state) => state.user)
 
   useEffect(() => {
     dispatch(getAllTopics())
@@ -68,14 +69,29 @@ const TopicsList = () => {
                     <td className='px-6 py-4'>
                       <span
                         className={`rounded  px-2.5 py-0.5 text-sm font-semibold  ${
-                          topic.status === 'approve'
+                          user &&
+                          user.role === 'supervisor' &&
+                          topic.supervisor.status === 'approve'
                             ? 'bg-green-200 text-green-800'
-                            : topic.status === 'reject'
+                            : topic.supervisor.status === 'reject'
+                            ? 'bg-red-200 text-red-800'
+                            : 'bg-blue-200 text-blue-800'
+                        } ${
+                          user &&
+                          user.role === 'co_supervisor' &&
+                          topic.coSupervisor.status === 'approve'
+                            ? 'bg-green-200 text-green-800'
+                            : topic.coSupervisor.status === 'reject'
                             ? 'bg-red-200 text-red-800'
                             : 'bg-blue-200 text-blue-800'
                         }`}
                       >
-                        {topic.status}
+                        {user &&
+                          user.role === 'supervisor' &&
+                          topic.supervisor.status}
+                        {user &&
+                          user.role === 'co_supervisor' &&
+                          topic.coSupervisor.status}
                       </span>
                     </td>
                   </tr>

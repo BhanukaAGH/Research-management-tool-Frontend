@@ -5,7 +5,7 @@ import { MdKeyboardBackspace } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
 import { selectTopic } from '../../../features/topic/topicSlice'
 
-const SelectedTopic = ({ selectTopic: topic, setSelectTopic }) => {
+const SelectedTopic = () => {
   const dispatch = useDispatch()
 
   return (

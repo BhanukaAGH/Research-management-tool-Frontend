@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = '/api/v1/topic/'
+const API_URL = '/api/v1/topic'
 
 // create topic
 const createTopic = async (topicData, token) => {
@@ -66,12 +66,46 @@ const deleteTopic = async (topicId, token) => {
   return response.data
 }
 
+// request supervisor
+const requestSupervisor = async (requestData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.post(
+    API_URL + '/request/supervisor',
+    requestData,
+    config
+  )
+  return response.data
+}
+
+// request co-supervisor
+const requestCoSupervisor = async (requestData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.post(
+    API_URL + '/request/co-supervisor',
+    requestData,
+    config
+  )
+  return response.data
+}
+
 const authService = {
   createTopic,
   getAllTopic,
   getSingleTopic,
   updateTopic,
   deleteTopic,
+  requestSupervisor,
+  requestCoSupervisor,
 }
 
 export default authService
