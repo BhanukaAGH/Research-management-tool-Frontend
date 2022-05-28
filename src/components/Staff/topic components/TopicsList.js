@@ -11,7 +11,9 @@ import Spinner from '../../Spinner'
 const TopicsList = () => {
   const dispatch = useDispatch()
 
-  const { topics, isLoading } = useSelector((state) => state.topic)
+  const { topics, isLoading, isSuccess, isError } = useSelector(
+    (state) => state.topic
+  )
 
   useEffect(() => {
     dispatch(getAllTopics())
@@ -19,7 +21,7 @@ const TopicsList = () => {
 
   useEffect(() => {
     dispatch(reset())
-  }, [topics])
+  }, [isSuccess, isError])
 
   if (isLoading) {
     return <Spinner />
@@ -27,14 +29,14 @@ const TopicsList = () => {
 
   return (
     <>
-      {topics.length === 0 && (
+      {topics?.length === 0 && (
         <div className='flex w-full items-center justify-center py-4'>
           <div className='w-full rounded-md bg-gray-700 py-4 text-center text-base font-medium text-white shadow-md md:text-lg lg:w-1/2 lg:text-xl'>
             No topic request.
           </div>
         </div>
       )}
-      {topics.length > 0 && (
+      {topics?.length > 0 && (
         <div className='scrollbar max-h-full w-full overflow-auto scroll-smooth'>
           <table className='relative h-full w-full overflow-auto text-left text-sm text-gray-500'>
             <thead className='sticky top-0'>

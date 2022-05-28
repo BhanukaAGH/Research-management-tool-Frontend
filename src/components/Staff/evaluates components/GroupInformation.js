@@ -18,7 +18,6 @@ const GroupInformation = ({ selectGroup, setSelectGroup }) => {
 
   useEffect(() => {
     if (!evaluateMark && evaluateData) {
-      console.log('called')
       dispatch(createEvaluation(evaluateData))
     }
   }, [evaluateMark])
