@@ -12,6 +12,7 @@ const TopicInformation = () => {
   const { isLoading, isSuccess, isError, message, topic } = useSelector(
     (state) => state.topic
   )
+  const { user } = useSelector((state) => state.user)
 
   if (isLoading) {
     return <Spinner />
@@ -54,7 +55,12 @@ const TopicInformation = () => {
             <dt className='text-sm font-medium text-gray-500'>Status</dt>
             <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
               <div className='flex items-center justify-between'>
-                {topic.status.toUpperCase()}
+                {user &&
+                  user.role === 'supervisor' &&
+                  topic.supervisor.status.toUpperCase()}
+                {user &&
+                  user.role === 'co_supervisor' &&
+                  topic.coSupervisor.status.toUpperCase()}
                 <div className='space-x-2'>
                   <span
                     className='cursor-pointer rounded-md bg-blue-200 py-1  px-4 text-blue-500'
@@ -62,7 +68,14 @@ const TopicInformation = () => {
                       dispatch(
                         updateTopic({
                           topicId: topic._id,
-                          topicData: { status: 'approve' },
+                          topicData: {
+                            id:
+                              user.role === 'supervisor'
+                                ? topic.supervisor.id
+                                : user.role === 'co_supervisor' &&
+                                  topic.coSupervisor.id,
+                            status: 'approve',
+                          },
                         })
                       )
                       enqueueSnackbar('topic was approved.', {
@@ -78,7 +91,14 @@ const TopicInformation = () => {
                       dispatch(
                         updateTopic({
                           topicId: topic._id,
-                          topicData: { status: 'reject' },
+                          topicData: {
+                            id:
+                              user.role === 'supervisor'
+                                ? topic.supervisor.id
+                                : user.role === 'co_supervisor' &&
+                                  topic.coSupervisor.id,
+                            status: 'reject',
+                          },
                         })
                       )
                       enqueueSnackbar('topic was rejected.', {
