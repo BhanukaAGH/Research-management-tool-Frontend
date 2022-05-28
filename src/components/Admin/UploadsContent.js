@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSnackbar } from "notistack";
 import {
   getDownloadURL,
   ref,
@@ -10,6 +11,8 @@ import { confirm } from "react-confirm-box";
 import { storage } from "../../firebase-config";
 
 const UploadsContent = () => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const [progress, setProgress] = useState(0); //store and display progress of upload in real time
   const [uploads, setUploads] = useState([]); //to store all documents from firebase storage
   const [state, setState] = useState("");
@@ -20,14 +23,14 @@ const UploadsContent = () => {
     e.preventDefault();
     const file = e.target[0].files[0];
     if (!file) {
-      window.alert("no file selected");
+      enqueueSnackbar("No File Selected", { variant: "info" });
       return;
     }
     const found = uploads.some((el) => el.name === file.name);
     //console.log("found value=",found)
     //console.log("file name",file.name)
     if (found) {
-      window.alert("file with name already exists");
+      enqueueSnackbar("file with name already exists", { variant: "info" });
     } else {
       uploadFiles(file);
     }
@@ -64,9 +67,12 @@ const UploadsContent = () => {
         );
         setProgress(prog);
       },
-      (err) => console.log(err),
+      (err) => enqueueSnackbar("Error", { variant: "error" }),
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => console.log(url));
+        getDownloadURL(uploadTask.snapshot.ref).then(
+          (url) => console.log(url),
+          enqueueSnackbar("Uploaded", { variant: "success" })
+        );
       }
     );
   };
@@ -78,18 +84,20 @@ const UploadsContent = () => {
       deleteObject(desertRef)
         .then(() => {
           //console.log("success")
-          window.alert("sucess fully deleted");
+          enqueueSnackbar("sucess fully deleted", { variant: "success" });
         })
         .catch((error) => {
-          window.alert("Failed to delete");
+          //window.alert("Failed to delete");
+          enqueueSnackbar("Failed to delete", { variant: "error" });
           //console.log("failed",error)
         });
     } else {
       //console.log("users not removed");
-      window.alert("File Not removed");
+      //window.alert("File Not removed");
+      enqueueSnackbar("File Not removed", { variant: "info" });
     }
   };
-  
+
   useEffect(() => {
     List();
   }, []);
@@ -155,14 +163,11 @@ const UploadsContent = () => {
         </div>
       </div>
       {/* <h3>Uploaded {progress}%</h3> */}
-      <p className="text-sm text-red-500">
-        Click On File Name to Download
-      </p>
+      <p className="text-sm text-red-500">Click On File Name to Download</p>
       <div class="grid grid-cols-4 gap-4">
         {uploads.map((up) => {
           return (
             <div class="w-full rounded-lg border border-gray-200 bg-white bg-opacity-70 p-0.5 shadow-md ">
-              
               <div key={up.url} className="url">
                 <br />
                 <a href={up.url}>

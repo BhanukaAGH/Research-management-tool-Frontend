@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useSnackbar } from 'notistack'
+import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 
-
-
 const CreateSubType = ({ setClickEdit }) => {
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
 
   //console.log(singleUser)
@@ -28,36 +26,32 @@ const CreateSubType = ({ setClickEdit }) => {
   const [Description, setDescription] = useState("");
 
   //submit/cerate sub type
-  const onSubmit = async (data) =>{
-
+  const onSubmit = async (data) => {
     if (data.name === "bill") {
       window.alert(data.name.length);
-    } 
-    const url = `http://localhost:5000/subtype/create`;
-    console.log("NAME",data.name)
+    }
+    const url = `/api/v1/subtype/create`;
+    console.log("NAME", data.name);
     //console.log("details",Name,Type,Date,Description)
     // console.log("details", Name, Type, Date, Description);
-   
-    
+
     axios
       .post(url, {
         name: data.name,
         dueDate: data.date,
         type: data.type,
-        description:data.desc,
+        description: data.desc,
       })
       .then(function (response) {
-        console.log("response",response);
-        enqueueSnackbar(response.data.msg, { variant: 'success' })
+        console.log("response", response);
+        enqueueSnackbar(response.data.msg, { variant: "success" });
         setClickEdit(false);
       })
       .catch(function (error) {
-        console.log("responseError",error.response.data.msg);
-        enqueueSnackbar(error.response.data.msg, { variant: 'error' })
+        console.log("responseError", error.response.data.msg);
+        enqueueSnackbar(error.response.data.msg, { variant: "error" });
       });
-
-    
-  }
+  };
   return (
     <div className="absolute inset-0 z-[5] min-w-full overflow-y-auto">
       <div className="relative flex h-full w-full items-center justify-center p-4">
