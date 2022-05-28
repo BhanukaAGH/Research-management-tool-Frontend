@@ -60,11 +60,15 @@ const StaffChat = () => {
                     key={index}
                   >
                     <div className='flex-col'>
-                      <div className='relative max-w-xl rounded px-2 py-1 text-gray-700 shadow'>
+                      <div
+                        className={`relative max-w-xl rounded-lg px-4 py-2 text-gray-700 shadow-md shadow-gray-300 ${
+                          user.userId === uid ? 'bg-blue-50' : 'bg-teal-50'
+                        }`}
+                      >
                         <span className='block text-xs'>{username}</span>
                         <span className='block'>{text}</span>
                       </div>
-                      <span className='block text-right text-xs text-gray-400'>
+                      <span className='block py-1 text-right text-xs text-gray-400'>
                         {createAt && moment(createAt.toDate()).format('DD MMM')}
                       </span>
                     </div>

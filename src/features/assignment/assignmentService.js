@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:5000/subtype/list'
+const API_URL = '/api/v1/subtype/list'
 
 // get all assignments
 const getAllAssignments = async () => {
