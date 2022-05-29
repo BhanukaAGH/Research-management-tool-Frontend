@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { confirm } from 'react-confirm-box'
 import CreateMS from './subComponents/CreateMS'
-import AddCriteria from './subComponents/addCriteria'
+import AddCriteria from './subComponents/AddCriteria'
 import { useSnackbar } from 'notistack'
 
 const MarkingScheme = () => {
