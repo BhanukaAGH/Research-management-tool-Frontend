@@ -14,11 +14,13 @@ import { useSnackbar } from 'notistack'
 import moment from 'moment'
 import { IoChatbubblesSharp } from 'react-icons/io5'
 import axios from 'axios'
+import Spinner from '../Spinner'
 
 const StudentChats = () => {
   const [chat, setChat] = useState([])
   const [topic, setTopic] = useState(null)
   const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
 
   const { user } = useSelector((state) => state.user)
@@ -26,6 +28,7 @@ const StudentChats = () => {
   useEffect(() => {
     const getTopic = async () => {
       if (user && user.groupId) {
+        setLoading(true)
         try {
           const response = await axios.get(
             `/api/v1/topic/group/${user.groupId}`
@@ -34,6 +37,7 @@ const StudentChats = () => {
         } catch (error) {
           enqueueSnackbar('You have no Topic', { variant: 'warning' })
         }
+        setLoading(false)
       }
     }
     getTopic()
@@ -64,6 +68,10 @@ const StudentChats = () => {
       })
     }
   }, [topic])
+
+  if (loading) {
+    return <Spinner />
+  }
 
   return (
     <div className='h-full w-full overflow-hidden p-5'>
