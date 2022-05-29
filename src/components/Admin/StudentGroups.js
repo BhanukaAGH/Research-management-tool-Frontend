@@ -9,7 +9,9 @@ const StudentGroups = () => {
 
   //get student group details
   const tableList = () => {
-    axios.get('/api/v1/student/getgroups').then((json) => setData(json.data))
+    axios
+      .get(`${process.env.SERVER_BACKEND_URL}/api/v1/student/getgroups`)
+      .then((json) => setData(json.data))
   }
 
   useEffect(() => {

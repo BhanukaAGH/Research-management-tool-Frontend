@@ -17,7 +17,7 @@ const CreateMS = ({ setclickCreate }) => {
 
   //create MS
   const onSubmit = async (data) => {
-    const url = `/api/v1/markscheme/create`
+    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/markscheme/create`
 
     await axios
       .post(url, {

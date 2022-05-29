@@ -14,9 +14,11 @@ const MarkingScheme = () => {
   const [ms, setms] = useState(null) //set markscheme id
 
   const cardList = () => {
-    axios.get('/api/v1/markscheme/get').then((json) => {
-      setData(json.data)
-    })
+    axios
+      .get(`${process.env.SERVER_BACKEND_URL}/markscheme/get`)
+      .then((json) => {
+        setData(json.data)
+      })
   }
 
   useEffect(() => {
@@ -30,7 +32,7 @@ const MarkingScheme = () => {
       'Are you sure you want to remove this MarkScheme'
     )
     if (result) {
-      const url = `/api/v1/markscheme/del/${id}`
+      const url = `${process.env.SERVER_BACKEND_URL}/markscheme/del/${id}`
 
       axios
         .delete(url)

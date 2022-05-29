@@ -10,7 +10,7 @@ const EditUser = ({ setClickEdit, id }) => {
     role: '',
   })
   async function userDetails() {
-    const url = `/api/v1/users/find1/${id}`
+    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/users/find1/${id}`
 
     axios.get(url).then((json) => setFormData(json.data))
   }
@@ -20,7 +20,7 @@ const EditUser = ({ setClickEdit, id }) => {
   }, [])
 
   async function onSubmit() {
-    const url = `/api/v1/users/update1/${id}`
+    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/users/update1/${id}`
     const name = formData.name
     const role = formData.role
     console.log('detailss', name, role)
