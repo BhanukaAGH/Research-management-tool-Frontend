@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { confirm } from 'react-confirm-box'
-import CreateMS from './Sub components/CreateMS'
-import AddCriteria from './Sub components/addCriteria'
+import CreateMS from './subComponents/CreateMS'
+import AddCriteria from './subComponents/AddCriteria'
+import { useSnackbar } from 'notistack'
 
 const MarkingScheme = () => {
+  const { enqueueSnackbar } = useSnackbar()
+
   const [data, setData] = useState([])
   const [clickCreate, setclickCreate] = useState(false) //state to open create MS comonent
   const [clickCriteria, setclickCriteria] = useState(false) //state to open create criteria comonent
   const [ms, setms] = useState(null) //set markscheme id
 
   const cardList = () => {
-    axios.get('http://localhost:5000/markscheme/get').then((json) => {
+    axios.get('/api/v1/markscheme/get').then((json) => {
       setData(json.data)
-      console.log(json.data)
     })
   }
 
@@ -28,16 +30,24 @@ const MarkingScheme = () => {
       'Are you sure you want to remove this MarkScheme'
     )
     if (result) {
-      const url = `http://localhost:5000/markscheme/del/${id}`
+      const url = `/api/v1/markscheme/del/${id}`
 
-      axios.delete(url).then((response) => {
-        console.log(response)
-        //to refresh the data
-        cardList()
-      })
+      axios
+        .delete(url)
+        .then((response) => {
+          console.log(response)
+          enqueueSnackbar(response.data.msg, { variant: 'success' })
+          //to refresh the data
+          cardList()
+        })
+        .catch(function (error) {
+          console.log('error', error)
+
+          enqueueSnackbar(error.response.data.msg, { variant: 'error' })
+        })
     } else {
       //console.log("users not removed");
-      window.alert('Users Not removed')
+      enqueueSnackbar('Mark Scheme Not Deleted', { variant: 'info' })
     }
   }
 
@@ -120,7 +130,7 @@ const MarkingScheme = () => {
             </button>
 
             <br />
-            <p className='text-sm dark:text-red-500'>
+            <p className='text-sm text-red-500'>
               Click On MarkScheme to add criteria
             </p>
           </div>

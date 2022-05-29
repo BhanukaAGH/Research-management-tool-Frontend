@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { confirm } from 'react-confirm-box'
-import Allocate from './Sub components/Allocate'
+import Allocate from './subComponents/Allocate'
 
 const StudentGroups = () => {
   const [data, setData] = useState([]) //get all student groups
@@ -10,9 +9,7 @@ const StudentGroups = () => {
 
   //get student group details
   const tableList = () => {
-    axios
-      .get('http://localhost:5000/api/v1/student/getgroups')
-      .then((json) => setData(json.data))
+    axios.get('/api/v1/student/getgroups').then((json) => setData(json.data))
   }
 
   useEffect(() => {
@@ -33,28 +30,28 @@ const StudentGroups = () => {
           <td className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'>
             <ul>
               <li>{user.leader.name}</li>
-              <li>{user.leader.studentID}</li>
+              <li>{user.leader.regNo}</li>
               <li>{user.leader.email}</li>
             </ul>
           </td>
           <td className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'>
             <ul>
               <li>{user.member2.name}</li>
-              <li>{user.member2.studentID}</li>
+              <li>{user.member2.regNo}</li>
               <li>{user.member2.email}</li>
             </ul>
           </td>
           <td className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'>
             <ul>
               <li>{user.member3.name}</li>
-              <li>{user.member3.studentID}</li>
+              <li>{user.member3.regNo}</li>
               <li>{user.member3.email}</li>
             </ul>
           </td>
           <td className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'>
             <ul>
               <li>{user.member4.name}</li>
-              <li>{user.member4.studentID}</li>
+              <li>{user.member4.regNo}</li>
               <li>{user.member4.email}</li>
             </ul>
           </td>
@@ -89,41 +86,43 @@ const StudentGroups = () => {
             refresh Table
           </button>
         </div>
-        <table
-          id='myTable'
-          className='w-full text-left text-sm text-gray-500 dark:text-gray-400'
-        >
-          <thead className='bg-[#3a454b] text-xs uppercase text-[#e2a500] dark:bg-[#3a454b] dark:text-[#e2a500]'>
-            <tr>
-              <th scope='col' className='p-4'>
-                <div className='flex items-center'></div>
-              </th>
-              <th scope='col' className='px-2 py-1'>
-                Group ID
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Leader
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Member 1
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Member 2
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Member 3
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Panel_Member
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                <span className='sr-only'>Edit</span>
-              </th>
-            </tr>
-          </thead>
+        <a onClick={tableList}>
+          <table
+            id='myTable'
+            className='w-full text-left text-sm text-gray-500 dark:text-gray-400'
+          >
+            <thead className='bg-[#3a454b] text-xs uppercase text-[#e2a500] dark:bg-[#3a454b] dark:text-[#e2a500]'>
+              <tr>
+                <th scope='col' className='p-4'>
+                  <div className='flex items-center'></div>
+                </th>
+                <th scope='col' className='px-2 py-1'>
+                  Group ID
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  Leader
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  Member 1
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  Member 2
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  Member 3
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  Panel_Member
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  <span className='sr-only'>Edit</span>
+                </th>
+              </tr>
+            </thead>
 
-          <tbody>{renderTable()}</tbody>
-        </table>
+            <tbody>{renderTable()}</tbody>
+          </table>
+        </a>
       </div>
       {allocate && <Allocate groupID={groupID} setAllocate={setAllocate} />}
     </div>

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { confirm } from 'react-confirm-box'
-import Register from './Sub components/Register'
-import EditUser from './Sub components/EditUser'
+import Register from './subComponents/Register'
+import EditUser from './subComponents/EditUser'
+import { useSnackbar } from 'notistack'
 
 function UsersContent() {
+  const { enqueueSnackbar } = useSnackbar()
+
   const [data, setData] = useState([])
   const [Uid, setUid] = useState([])
   const [clickEdit, setClickEdit] = useState(false) //state to display update
@@ -12,15 +15,13 @@ function UsersContent() {
   const [registerUser, setRegisterUser] = useState(false)
 
   //method to get data of single user for update purposes
-  async function userDetails(Userid) {
-    const url = `http://localhost:5000/users/find1/${Userid}`
-    axios.get(url).then((json) => setsingleUser(json.data))
-  }
+  // async function userDetails(Userid) {
+  //   const url = `http://localhost:5000/users/find1/${Userid}`
+  //   axios.get(url).then((json) => setsingleUser(json.data))
+  // }
   //method to refresh table upon every change
   const tableList = () => {
-    axios
-      .get('http://localhost:5000/users/list')
-      .then((json) => setData(json.data))
+    axios.get('/api/v1/users/list').then((json) => setData(json.data))
   }
 
   useEffect(() => {
@@ -39,16 +40,26 @@ function UsersContent() {
         'Are you sure u want to remove all checked users ?'
       )
       if (result) {
-        const url = `http://localhost:5000/users/deletem/${Uid}`
+        const url = `/api/v1/users/deletem/${Uid}`
 
-        axios.delete(url).then((response) => {
-          console.log(response)
-          //to refresh the data
-          tableList()
-        })
+        axios
+          .delete(url)
+          .then((response) => {
+            console.log(response)
+            setUid([])
+            enqueueSnackbar(response.data.msg, { variant: 'success' })
+            //to refresh the data
+            tableList()
+          })
+          .catch(function (error) {
+            //console.log("responseError",error.response.data.msg);
+            setUid([])
+            enqueueSnackbar(error.data.msg, { variant: 'error' })
+          })
       } else {
         //console.log("users not removed");
-        window.alert('Users Not removed')
+        //window.alert('Users Not removed')
+        enqueueSnackbar("User/'s Not Removed", { variant: 'info' })
       }
     }
   }
@@ -65,9 +76,9 @@ function UsersContent() {
     console.log(e.target.value)
     var url
     if (e.target.value == 'all') {
-      url = 'http://localhost:5000/users/list'
+      url = '/api/v1/users/list'
     } else {
-      url = `http://localhost:5000/users/findby/${e.target.value}`
+      url = `/api/v1/users/findby/${e.target.value}`
     }
     axios.get(url).then((json) => setData(json.data))
   }
@@ -131,9 +142,15 @@ function UsersContent() {
             <a
               className='font-medium text-[#e2a500] hover:underline'
               onClick={() => {
-                setClickEdit(true)
-                setid(user._id)
-                userDetails(user._id)
+                if (user.role == 'admin') {
+                  enqueueSnackbar('Admin cannot be updated', {
+                    variant: 'info',
+                  })
+                  window.alert('Admin cannot be updated')
+                } else {
+                  setClickEdit(true)
+                  setid(user._id)
+                }
               }}
             >
               Update
@@ -201,46 +218,48 @@ function UsersContent() {
             refresh Table
           </button>
         </div>
-        <table
-          id='myTable'
-          className='w-full text-left text-sm text-gray-500 dark:text-gray-400'
-        >
-          <thead className='bg-[#3a454b] text-xs uppercase text-[#e2a500] dark:bg-[#3a454b] dark:text-[#e2a500]'>
-            <tr>
-              <th scope='col' className='p-4'>
-                <div className='flex items-center'></div>
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Name
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Email
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Registration No.
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                <select
-                  className='bg-[#3a454b] text-xs font-bold uppercase text-[#e2a500] dark:bg-[#3a454b] dark:text-[#e2a500]'
-                  id='cars'
-                  onChange={handleRoleChange}
-                >
-                  <option value='all'>All Roles</option>
-                  <option value='student'>Students</option>
-                  <option value='supervisor'>Supervisor</option>
-                  <option value='co_supervisor'>Co-Supervisor</option>
-                  <option value='panel_member'>Panel Member</option>
-                  <option value='admin'>Admin</option>
-                </select>
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                <span className='sr-only'>Edit</span>
-              </th>
-            </tr>
-          </thead>
+        <a onClick={tableList}>
+          <table
+            id='myTable'
+            className='w-full text-left text-sm text-gray-500 dark:text-gray-400'
+          >
+            <thead className='bg-[#3a454b] text-xs uppercase text-[#e2a500] dark:bg-[#3a454b] dark:text-[#e2a500]'>
+              <tr>
+                <th scope='col' className='p-4'>
+                  <div className='flex items-center'></div>
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  Name
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  Email
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  Registration No.
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  <select
+                    className='bg-[#3a454b] text-xs font-bold uppercase text-[#e2a500] dark:bg-[#3a454b] dark:text-[#e2a500]'
+                    id='cars'
+                    onChange={handleRoleChange}
+                  >
+                    <option value='all'>All Roles</option>
+                    <option value='student'>Students</option>
+                    <option value='supervisor'>Supervisor</option>
+                    <option value='co_supervisor'>Co-Supervisor</option>
+                    <option value='panel_member'>Panel Member</option>
+                    <option value='admin'>Admin</option>
+                  </select>
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  <span className='sr-only'>Edit</span>
+                </th>
+              </tr>
+            </thead>
 
-          <tbody>{renderTable()}</tbody>
-        </table>
+            <tbody>{renderTable()}</tbody>
+          </table>
+        </a>
       </div>
       {clickEdit && <EditUser id={id} setClickEdit={setClickEdit} />}
       {registerUser && <Register setRegisterUser={setRegisterUser} />}

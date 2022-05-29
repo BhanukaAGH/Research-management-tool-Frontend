@@ -1,28 +1,40 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
+import { useSnackbar } from 'notistack'
+import { useForm } from 'react-hook-form'
 
 const CreateMS = ({ setclickCreate }) => {
+  const { enqueueSnackbar } = useSnackbar()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
+
   var [Name, setName] = useState('')
   var [Type, setType] = useState('')
   var [Description, setDescription] = useState('')
 
-  async function onSubmit() {
-    const url = `http://localhost:5000/markscheme/create`
+  //create MS
+  const onSubmit = async (data) => {
+    const url = `/api/v1/markscheme/create`
 
-    axios
+    await axios
       .post(url, {
-        markSchemeName: Name,
-        schemeType: Type,
-        Description: Description,
+        markSchemeName: data.name,
+        schemeType: data.type,
+        Description: data.desc,
       })
       .then(function (response) {
-        console.log(response)
+        console.log('response', response)
+        enqueueSnackbar(response.data.msg, { variant: 'success' })
+        setclickCreate(false)
       })
       .catch(function (error) {
-        console.log(error)
-      })
+        console.log('error', error)
 
-    setclickCreate(false)
+        enqueueSnackbar(error.response.data.msg, { variant: 'error' })
+      })
   }
   return (
     <div className='absolute inset-0 z-[5] min-w-full overflow-y-auto'>
@@ -53,7 +65,7 @@ const CreateMS = ({ setclickCreate }) => {
               <h3 className='mb-4 text-xl font-medium text-gray-900'>
                 Create Marking Scheme
               </h3>
-              <form className='space-y-6' onSubmit={onSubmit}>
+              <form className='space-y-6' onSubmit={handleSubmit(onSubmit)}>
                 <div>
                   <label
                     htmlFor='name'
@@ -67,10 +79,11 @@ const CreateMS = ({ setclickCreate }) => {
                     onChange={(e) => setName(e.target.value)}
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
                     placeholder='Marking Scheme Name'
+                    {...register('name')}
                   />
                 </div>
                 <label
-                  for='message'
+                  htmlFor='message'
                   className='mb-2 block text-sm font-medium text-gray-900'
                 >
                   Description
@@ -78,9 +91,10 @@ const CreateMS = ({ setclickCreate }) => {
                 <textarea
                   id='message'
                   rows='4'
-                  class='bg-white-50 dark:bg-white-700 dark:border-white-600 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:text-black dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+                  className='bg-white-50 dark:bg-white-700 dark:border-white-600 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:text-black dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
                   placeholder='Description...'
                   onChange={(e) => setDescription(e.target.value)}
+                  {...register('desc')}
                 ></textarea>
                 <div>
                   <label
@@ -94,8 +108,9 @@ const CreateMS = ({ setclickCreate }) => {
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
                     name='type'
                     onChange={(e) => setType(e.target.value)}
+                    {...register('type')}
                   >
-                    <option defaultValue='document'>Select Type</option>
+                    <option value=''>Select Type</option>
                     <option value='document'>Document</option>
                     <option value='presentation'>Presentation</option>
                   </select>

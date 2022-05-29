@@ -3,6 +3,8 @@ import userService from './userService'
 
 const initialState = {
   user: null,
+  supervisors: [],
+  coSupervisors: [],
   isLoading: false,
   isSuccess: false,
   isError: false,
@@ -38,12 +40,37 @@ export const updateUserPicture = createAsyncThunk(
   }
 )
 
+export const getAllSupervisors = createAsyncThunk(
+  'users/getAllSupervisors',
+  async (_, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.token
+      return await userService.getAllSupervisors(token)
+    } catch (error) {
+      const message = error.response.data.msg || error.message
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+export const getAllCoSupervisors = createAsyncThunk(
+  'users/getAllCoSupervisors',
+  async (_, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.token
+      return await userService.getAllCoSupervisors(token)
+    } catch (error) {
+      const message = error.response.data.msg || error.message
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     reset: (state) => {
-      state.isLoading = false
       state.isSuccess = false
       state.isError = false
       state.message = ''
@@ -82,6 +109,42 @@ export const userSlice = createSlice({
       .addCase(updateUserPicture.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
+        state.message = action.payload
+        state.isSuccess = false
+      })
+
+      .addCase(getAllSupervisors.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getAllSupervisors.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.supervisors = action.payload
+        state.isError = false
+        state.message = ''
+      })
+      .addCase(getAllSupervisors.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.supervisors = null
+        state.message = action.payload
+        state.isSuccess = false
+      })
+
+      .addCase(getAllCoSupervisors.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getAllCoSupervisors.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.coSupervisors = action.payload
+        state.isError = false
+        state.message = ''
+      })
+      .addCase(getAllCoSupervisors.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.coSupervisors = null
         state.message = action.payload
         state.isSuccess = false
       })

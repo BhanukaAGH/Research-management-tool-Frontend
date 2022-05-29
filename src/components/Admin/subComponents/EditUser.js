@@ -1,48 +1,51 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useSnackbar } from 'notistack'
 
-const CreateSubType = ({ setClickEdit }) => {
+const EditUser = ({ setClickEdit, id }) => {
+  const { enqueueSnackbar } = useSnackbar()
   //console.log(singleUser)
   var [formData, setFormData] = useState({
     name: '',
-    dueDate: '',
-    type: '',
-    description: '',
+    role: '',
   })
+  async function userDetails() {
+    const url = `/api/v1/users/find1/${id}`
 
-  var [Name, setName] = useState('')
-  var [Type, setType] = useState('')
-  var [Date, setDate] = useState('')
-  var [Description, setDescription] = useState('')
+    axios.get(url).then((json) => setFormData(json.data))
+  }
+  useEffect(() => {
+    userDetails()
+    //console.log('name of user', formData)
+  }, [])
 
   async function onSubmit() {
-    console.log(formData)
-
-    const url = `http://localhost:5000/subtype/create`
-
-    //console.log("details",Name,Type,Date,Description)
+    const url = `/api/v1/users/update1/${id}`
+    const name = formData.name
+    const role = formData.role
+    console.log('detailss', name, role)
 
     axios
       .post(url, {
-        name: Name,
-        dueDate: Date,
-        type: Type,
-        description: Description,
+        name: name,
+        role: role,
       })
       .then(function (response) {
-        console.log(response)
+        console.log('then', response)
+        enqueueSnackbar(response.data.msg, { variant: 'success' })
       })
       .catch(function (error) {
-        console.log(error)
+        console.log('err', error)
+        enqueueSnackbar(error.response.data.msg, { variant: 'error' })
       })
 
+    //close popup window
     setClickEdit(false)
   }
+
   return (
     <div className='absolute inset-0 z-[5] min-w-full overflow-y-auto'>
       <div className='relative flex h-full w-full items-center justify-center p-4'>
-        <div className='absolute inset-0 bg-gray-800 bg-opacity-50 transition-opacity'></div>
-
         <div className=' w-full transform overflow-hidden rounded-lg  bg-white shadow-xl transition-all sm:my-8 sm:max-w-lg'>
           <div className='relative rounded-lg bg-white shadow'>
             <button
@@ -65,76 +68,71 @@ const CreateSubType = ({ setClickEdit }) => {
             </button>
             <div className='px-6 py-6 lg:px-8'>
               <h3 className='mb-4 text-xl font-medium text-gray-900'>
-                Add new Submission type
+                Update User
               </h3>
-              <form className='space-y-6' onSubmit={onSubmit}>
+
+              <form className='space-y-6'>
                 <div>
                   <label
                     htmlFor='name'
                     className='mb-2 block text-sm font-medium text-gray-900'
                   >
-                    Submission name
+                    User name
                   </label>
                   <input
                     type='text'
+                    defaultValue={formData.name}
+                    onChange={(e) =>
+                      setFormData({
+                        name: e.target.value,
+                        regNo: formData.regNo,
+                        email: formData.email,
+                        photoUrl: formData.photoUrl,
+                        role: formData.role,
+                      })
+                    }
+                    className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
                     name='name'
-                    onChange={(e) => setName(e.target.value)}
-                    className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    placeholder='Research Presentation template'
+                    id='name'
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor='regNo'
-                    className='mb-2 block text-sm font-medium text-gray-900'
-                  >
-                    Due Date
-                  </label>
-                  <input
-                    type='text'
-                    name='dueDate'
-                    onChange={(e) => setDate(e.target.value)}
-                    className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    placeholder='11/15/2022'
-                  />
-                </div>
-                <label
-                  for='message'
-                  className='mb-2 block text-sm font-medium text-gray-900'
-                >
-                  Description
-                </label>
-                <textarea
-                  id='message'
-                  rows='4'
-                  class='bg-white-50 dark:bg-white-700 dark:border-white-600 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:text-black dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
-                  placeholder='Description...'
-                  onChange={(e) => setDescription(e.target.value)}
-                ></textarea>
                 <div>
                   <label
                     htmlFor='user_role'
                     className='mb-2 block text-sm font-medium text-gray-900'
                   >
-                    Select document type
+                    Select an option
                   </label>
                   <select
-                    id='type'
                     className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500'
-                    name='type'
-                    onChange={(e) => setType(e.target.value)}
+                    defaultValue={formData.role}
+                    onChange={(e) =>
+                      setFormData({
+                        name: formData.name,
+                        regNo: formData.regNo,
+                        email: formData.email,
+                        photoUrl: formData.photoUrl,
+                        role: e.target.value,
+                      })
+                    }
+                    name='role'
+                    id='role'
                   >
-                    <option defaultValue='student'>Select Type</option>
-                    <option value='.ppt'>ppt</option>
-                    <option value='.word'>word doc</option>
-                    <option value='.pdf'>pdf</option>
+                    <option defaultValue={formData.role}>
+                      {formData.role}
+                    </option>
+                    <option value='student'>Student</option>
+                    <option value='supervisor'>Supervisor</option>
+                    <option value='co_supervisor'>Co-Supervisor</option>
+                    <option value='panel_member'>Panel Member</option>
                   </select>
                 </div>
                 <button
                   type='submit'
+                  onClick={onSubmit}
                   className='w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300'
                 >
-                  Create Submission Type
+                  Update account
                 </button>
               </form>
             </div>
@@ -145,4 +143,4 @@ const CreateSubType = ({ setClickEdit }) => {
   )
 }
 
-export default CreateSubType
+export default EditUser

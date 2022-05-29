@@ -1,15 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { confirm } from 'react-confirm-box'
+import { useSnackbar } from 'notistack'
+import { useForm } from 'react-hook-form'
 
 const AddCriteria = ({ setclickCriteria, ms, setms }) => {
+  const { enqueueSnackbar } = useSnackbar()
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm()
+
   const [criteria, setCriteria] = useState('') //set critirea
   const [mark, setMark] = useState('') //set mark
 
   //to refresh criteria list
   const MarkSchemeData = () => {
     const id = ms._id
-    const url = `http://localhost:5000/markscheme/getOne/${id}`
+    const url = `/api/v1/markscheme/getOne/${id}`
     axios.get(url).then((json) => {
       setms(json.data)
       console.log(json.data)
@@ -20,41 +30,51 @@ const AddCriteria = ({ setclickCriteria, ms, setms }) => {
   }, [])
 
   //add criteria
-  async function onSubmit(event) {
-    event.preventDefault()
+  const onSubmit = async (data) => {
+    //event.preventDefault()
     const id = ms._id
-    const url = `http://localhost:5000/markscheme/update/${id}`
+    const url = `/api/v1/markscheme/update/${id}`
 
-    const res = await axios.patch(url, {
-      criteria: criteria,
-      allocatedMark: mark,
-    })
-
-    if (res.status == 200) {
-      window.alert('success full')
-    } else {
-      window.alert('failedl')
-    }
-    setCriteria('')
-    setMark('')
-    event.target.reset()
-    MarkSchemeData()
+    await axios
+      .patch(url, {
+        criteria: data.criteria,
+        allocatedMark: data.mark,
+      })
+      .then(function (response) {
+        console.log('response', response)
+        enqueueSnackbar(response.data.msg, { variant: 'success' })
+        MarkSchemeData()
+        document.getElementById('form').reset()
+      })
+      .catch(function (error) {
+        console.log('error', error)
+        enqueueSnackbar('Error', { variant: 'error' })
+      })
   }
   //delete criteria
   async function HandleDelete(Cid) {
     const id = ms._id
-    const url = `http://localhost:5000/markscheme/remove/${id}`
+    const url = `/api/v1/markscheme/remove/${id}`
 
     const result = await confirm(
       'Are you sure you want to remove this Criteria'
     )
     if (result) {
-      const res = await axios.patch(url, {
-        _id: Cid,
-      })
-      MarkSchemeData()
+      await axios
+        .patch(url, {
+          _id: Cid,
+        })
+        .then(function (response) {
+          console.log('response', response)
+          enqueueSnackbar(response.data.msg, { variant: 'success' })
+          MarkSchemeData()
+        })
+        .catch(function (error) {
+          console.log('error', error)
+          enqueueSnackbar(error.response.data.msg, { variant: 'error' })
+        })
     } else {
-      window.alert('Criteria Not removed')
+      enqueueSnackbar('Criteria Not removed', { variant: 'info' })
     }
   }
 
@@ -110,44 +130,46 @@ const AddCriteria = ({ setclickCriteria, ms, setms }) => {
 
         <div className='mb-4 overflow-hidden bg-white shadow sm:rounded-lg'>
           <div className='px-4 py-5 sm:px-6'>
-            <form onSubmit={onSubmit}>
-              <div class='grid xl:grid-cols-5 xl:gap-6'>
-                <div class='group relative z-0 col-span-3 mb-6 w-full'>
+            <form id='form' onSubmit={handleSubmit(onSubmit)}>
+              <div className='grid xl:grid-cols-5 xl:gap-6'>
+                <div className='group relative z-0 col-span-3 mb-6 w-full'>
                   <input
                     type='text'
                     name='criteria'
                     id='criteria'
-                    class='text-white-900 peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-black dark:focus:border-blue-500'
+                    className='text-white-900 peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-black dark:focus:border-blue-500'
                     onChange={(e) => setCriteria(e.target.value)}
                     required
+                    {...register('criteria')}
                   />
                   <label
-                    for='criteria'
-                    class='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500'
+                    htmlFor='criteria'
+                    className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500'
                   >
                     Criteria
                   </label>
                 </div>
-                <div class='group relative z-0 col-span-1 mb-6 w-full'>
+                <div className='group relative z-0 col-span-1 mb-6 w-full'>
                   <input
                     type='number'
                     name='mark'
                     id='mark'
-                    class='text-white-900 peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-black dark:focus:border-blue-500'
+                    className='text-white-900 peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-black dark:focus:border-blue-500'
                     onChange={(e) => setMark(e.target.value)}
                     required
+                    {...register('mark')}
                   />
                   <label
-                    for='mark'
-                    class='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500'
+                    htmlFor='mark'
+                    className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500'
                   >
                     Mark
                   </label>
                 </div>
-                <div class=' group relative z-0 mb-6 w-full  '>
+                <div className=' group relative z-0 mb-6 w-full  '>
                   <button
                     type='submit'
-                    class='mr-2 mb-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none dark:bg-green-600 dark:hover:bg-green-700 '
+                    className='mr-2 mb-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none dark:bg-green-600 dark:hover:bg-green-700 '
                   >
                     Add
                   </button>
@@ -176,7 +198,7 @@ const AddCriteria = ({ setclickCriteria, ms, setms }) => {
                       onClick={() => {
                         HandleDelete(item._id)
                       }}
-                      class='font-medium text-[#C81E1E] hover:underline'
+                      className='font-medium text-[#C81E1E] hover:underline'
                     >
                       Remove
                     </a>

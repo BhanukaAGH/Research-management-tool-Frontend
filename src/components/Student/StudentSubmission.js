@@ -3,7 +3,7 @@ import Submition from './submitions/Submition'
 import SubmitionsList from './submitions/SubmitionsList'
 
 const StudentSubmission = () => {
-  const [selectSubmition, setSelectSubmition] = useState(false)
+  const [selectSubmition, setSelectSubmition] = useState(null)
 
   return (
     <div className='h-full w-full overflow-auto p-5'>

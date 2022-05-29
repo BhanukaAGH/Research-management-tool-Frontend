@@ -1,7 +1,7 @@
 import axios from 'axios'
 import FormData from 'form-data'
 
-const API_URL = 'http://localhost:5000/users/'
+const API_URL = '/api/v1/users/'
 
 // get loggin user info
 const getCurrentUser = async (userId) => {
@@ -30,9 +30,33 @@ const updateUserPicture = async (photoData, token) => {
   return response.data
 }
 
+// get all supervisors
+const getAllSupervisors = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+  const response = await axios.get(API_URL + 'getAllSupervisors', config)
+  return response.data
+}
+
+// get all co-supervisors
+const getAllCoSupervisors = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+  const response = await axios.get(API_URL + 'getAllCoSupervisors', config)
+  return response.data
+}
+
 const userService = {
   getCurrentUser,
   updateUserPicture,
+  getAllSupervisors,
+  getAllCoSupervisors,
 }
 
 export default userService

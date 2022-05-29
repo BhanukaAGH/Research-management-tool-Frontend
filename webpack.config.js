@@ -1,6 +1,6 @@
 const path = require('path')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
-const dotenv = require('dotenv')
+require('dotenv').config()
 const webpack = require('webpack')
 
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
     historyApiFallback: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: process.env.SERVER_BACKEND_URL,
         changeOrigin: true,
       },
     },
@@ -60,7 +60,7 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({ template: './public/index.html' }),
     new webpack.DefinePlugin({
-      'process.env': JSON.stringify(dotenv.config().parsed),
+      'process.env': JSON.stringify(process.env),
     }),
   ],
 }

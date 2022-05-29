@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  createEvaluation,
   getEvaluation,
   reset,
 } from '../../../features/evaluation/evaluationSlice'
 import Spinner from '../../Spinner'
 
-const MarkingScheme = ({ groupId, evaluateMark }) => {
+const MarkingScheme = ({ groupId, evaluateMark, setEvaluateData }) => {
   const [markingScheme, setMarkingScheme] = useState(null)
 
   const dispatch = useDispatch()
@@ -54,14 +53,48 @@ const MarkingScheme = ({ groupId, evaluateMark }) => {
       totalMark: calcTotal(),
       evaluateBy: user.userId,
     }
-    if (!evaluateMark && evaluationData !== evaluate) {
-      dispatch(createEvaluation(evaluationData))
-      console.log('Save')
-    }
-  }, [evaluateMark])
+    setEvaluateData(evaluationData)
+  }, [markingScheme])
 
   if (isLoading) {
-    return <Spinner />
+    return (
+      <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
+        <table className='w-full border-collapse text-left text-sm text-gray-500'>
+          <thead className='bg-gray-50 text-xs uppercase text-gray-700'>
+            <tr>
+              <th className='border px-6 py-3'>Criteria</th>
+              <th className='border px-6 py-3 text-center'>Allocated Marks</th>
+              <th className='border px-6 py-3 text-center'>Marks</th>
+            </tr>
+          </thead>
+          <tbody className='animate-pulse'>
+            <tr className='border-b bg-white'>
+              <th className='whitespace border px-6 py-4'>
+                <div className='h-2 w-1/2 rounded-md bg-slate-300'></div>
+              </th>
+              <th className='border px-6 py-4 text-center lg:w-32'>
+                <div className='h-2 w-1/2 rounded-md bg-slate-300'></div>
+              </th>
+              <td className='border px-6 py-4 lg:w-32'>
+                <div className='h-2 w-1/2 rounded-md bg-slate-300'></div>
+              </td>
+            </tr>
+
+            <tr className='border-b bg-white'>
+              <th
+                className='whitespace-nowrap border px-8 py-4 text-right'
+                colSpan={2}
+              >
+                Total
+              </th>
+              <td className='border px-6 py-4 text-center'>
+                <div className='h-2 w-1/2 rounded-md bg-slate-300'></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    )
   }
 
   return (

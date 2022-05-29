@@ -45,7 +45,6 @@ const Profile = () => {
       enqueueSnackbar(message, { variant: 'error' })
     }
     if (isSuccess && prevImageUrl !== user?.photoUrl) {
-      console.log('runnn')
       enqueueSnackbar('update user image', { variant: 'success' })
       setPrevImageUrl(user?.photoUrl)
     }

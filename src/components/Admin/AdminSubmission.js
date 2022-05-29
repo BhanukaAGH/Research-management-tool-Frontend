@@ -1,38 +1,47 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { confirm } from 'react-confirm-box'
-import CreateSubType from './Sub components/CreateSubType'
+import CreateSubType from './subComponents/CreateSubType'
+import { useSnackbar } from 'notistack'
 
 const AdminSubmission = () => {
+  //
+  const { enqueueSnackbar } = useSnackbar()
+
   const [data, setData] = useState([])
   const [clickEdit, setClickEdit] = useState(false) //state to display add user
-  const [subID, setsubID] = useState('')
+  //const [subID, setsubID] = useState('')
 
   //
 
   //method to refresh table upon every change
   const tableList = () => {
-    axios
-      .get('http://localhost:5000/subtype/list')
-      .then((json) => setData(json.data))
+    axios.get('/api/v1/subtype/list').then((json) => setData(json.data))
   }
 
   useEffect(() => {
     tableList()
   }, [])
 
-  async function DeletSubtype(name) {
+  async function DeletSubtype(name, subtypeID) {
     const result = await confirm('Confirm if you want to delete user: ' + name)
     if (result) {
-      const url = `http://localhost:5000/subtype/${subID}`
-      axios.delete(url).then((response) => {
-        console.log(response)
-        //to refresh the data
-        tableList()
-      })
+      const url = `/api/v1/subtype/${subtypeID}`
+      axios
+        .delete(url)
+        .then((response) => {
+          console.log('delrespones', response)
+          //to refresh the data
+          enqueueSnackbar(response.data.msg, { variant: 'success' })
+          tableList()
+        })
+        .catch(function (error) {
+          console.log('responseError', error.response.data.msg)
+          enqueueSnackbar(error.response.data.msg, { variant: 'error' })
+        })
     } else {
       //console.log("users not removed");
-      window.alert('SubType Not removed')
+      enqueueSnackbar('Submission type not deleted', { variant: 'info' })
     }
   }
 
@@ -67,8 +76,8 @@ const AdminSubmission = () => {
               href='#'
               className='text-bold font-medium text-[#ff0000] hover:underline  dark:text-[#ff0000]'
               onClick={() => {
-                setsubID(Submission._id)
-                DeletSubtype(Submission.name)
+                //setsubID(Submission._id)
+                DeletSubtype(Submission.name, Submission._id)
               }}
             >
               Delete
@@ -104,31 +113,34 @@ const AdminSubmission = () => {
             refresh Table
           </button>
         </div>
-        <table className='w-full text-left text-sm text-gray-500 dark:text-gray-400'>
-          <thead className='bg-[#3a454b] text-xs uppercase text-[#e2a500] dark:bg-[#3a454b] dark:text-[#e2a500]'>
-            <tr>
-              <th scope='col' className='px-6 py-3'>
-                Submission Name
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Submission Type
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Due Date
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                description
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Created Date
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                <span className='sr-only'>Edit</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>{renderTable()}</tbody>
-        </table>
+        <a onClick={tableList}>
+          <table className='w-full text-left text-sm text-gray-500 dark:text-gray-400'>
+            <thead className='bg-[#3a454b] text-xs uppercase text-[#e2a500] dark:bg-[#3a454b] dark:text-[#e2a500]'>
+              <tr>
+                <th scope='col' className='px-6 py-3'>
+                  Submission Name
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  Submission Type
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  Due Date
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  description
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  Created Date
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  <span className='sr-only'>Edit</span>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>{renderTable()}</tbody>
+          </table>
+        </a>
       </div>
       {clickEdit && <CreateSubType setClickEdit={setClickEdit} />}
     </div>

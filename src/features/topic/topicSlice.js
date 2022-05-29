@@ -72,7 +72,35 @@ export const deleteTopic = createAsyncThunk(
   async (topicId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.token
-      return await topicService.getAllTopic(topicId, token)
+      return await topicService.deleteTopic(topicId, token)
+    } catch (error) {
+      const message = error.response.data.msg || error.message
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+// request supervisor
+export const requestSupervisor = createAsyncThunk(
+  'topic/requestSupervisor',
+  async (requestData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.token
+      return await topicService.requestSupervisor(requestData, token)
+    } catch (error) {
+      const message = error.response.data.msg || error.message
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+// request co-supervisor
+export const requestCoSupervisor = createAsyncThunk(
+  'topic/requestCoSupervisor',
+  async (requestData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.token
+      return await topicService.requestCoSupervisor(requestData, token)
     } catch (error) {
       const message = error.response.data.msg || error.message
       return thunkAPI.rejectWithValue(message)
@@ -85,7 +113,6 @@ export const topicSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.isLoading = false
       state.isSuccess = false
       state.isError = false
       state.message = ''
@@ -165,6 +192,36 @@ export const topicSlice = createSlice({
         state.topic = null
       })
       .addCase(deleteTopic.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+        state.topic = null
+      })
+
+      .addCase(requestSupervisor.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(requestSupervisor.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.topic = action.payload.topic
+      })
+      .addCase(requestSupervisor.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+        state.topic = null
+      })
+
+      .addCase(requestCoSupervisor.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(requestCoSupervisor.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.topic = action.payload.topic
+      })
+      .addCase(requestCoSupervisor.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
