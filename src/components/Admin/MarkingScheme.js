@@ -16,7 +16,6 @@ const MarkingScheme = () => {
   const cardList = () => {
     axios.get('/api/v1/markscheme/get').then((json) => {
       setData(json.data)
-      console.log(json.data)
     })
   }
 

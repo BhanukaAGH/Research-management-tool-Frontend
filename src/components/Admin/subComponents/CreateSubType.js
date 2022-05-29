@@ -115,7 +115,7 @@ const CreateSubType = ({ setClickEdit }) => {
                   />
                 </div>
                 <label
-                  for='message'
+                  htmlFor='message'
                   className='mb-2 block text-sm font-medium text-gray-900'
                 >
                   Description
@@ -123,7 +123,7 @@ const CreateSubType = ({ setClickEdit }) => {
                 <textarea
                   id='message'
                   rows='4'
-                  class='bg-white-50 dark:bg-white-700 dark:border-white-600 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:text-black dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+                  className='bg-white-50 dark:bg-white-700 dark:border-white-600 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:text-black dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
                   placeholder='Description...'
                   {...register('desc')}
                 ></textarea>

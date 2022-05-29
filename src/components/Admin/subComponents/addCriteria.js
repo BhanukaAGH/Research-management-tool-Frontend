@@ -131,45 +131,45 @@ const AddCriteria = ({ setclickCriteria, ms, setms }) => {
         <div className='mb-4 overflow-hidden bg-white shadow sm:rounded-lg'>
           <div className='px-4 py-5 sm:px-6'>
             <form id='form' onSubmit={handleSubmit(onSubmit)}>
-              <div class='grid xl:grid-cols-5 xl:gap-6'>
-                <div class='group relative z-0 col-span-3 mb-6 w-full'>
+              <div className='grid xl:grid-cols-5 xl:gap-6'>
+                <div className='group relative z-0 col-span-3 mb-6 w-full'>
                   <input
                     type='text'
                     name='criteria'
                     id='criteria'
-                    class='text-white-900 peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-black dark:focus:border-blue-500'
+                    className='text-white-900 peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-black dark:focus:border-blue-500'
                     onChange={(e) => setCriteria(e.target.value)}
                     required
                     {...register('criteria')}
                   />
                   <label
-                    for='criteria'
-                    class='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500'
+                    htmlFor='criteria'
+                    className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500'
                   >
                     Criteria
                   </label>
                 </div>
-                <div class='group relative z-0 col-span-1 mb-6 w-full'>
+                <div className='group relative z-0 col-span-1 mb-6 w-full'>
                   <input
                     type='number'
                     name='mark'
                     id='mark'
-                    class='text-white-900 peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-black dark:focus:border-blue-500'
+                    className='text-white-900 peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-black dark:focus:border-blue-500'
                     onChange={(e) => setMark(e.target.value)}
                     required
                     {...register('mark')}
                   />
                   <label
-                    for='mark'
-                    class='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500'
+                    htmlFor='mark'
+                    className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500'
                   >
                     Mark
                   </label>
                 </div>
-                <div class=' group relative z-0 mb-6 w-full  '>
+                <div className=' group relative z-0 mb-6 w-full  '>
                   <button
                     type='submit'
-                    class='mr-2 mb-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none dark:bg-green-600 dark:hover:bg-green-700 '
+                    className='mr-2 mb-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none dark:bg-green-600 dark:hover:bg-green-700 '
                   >
                     Add
                   </button>
@@ -198,7 +198,7 @@ const AddCriteria = ({ setclickCriteria, ms, setms }) => {
                       onClick={() => {
                         HandleDelete(item._id)
                       }}
-                      class='font-medium text-[#C81E1E] hover:underline'
+                      className='font-medium text-[#C81E1E] hover:underline'
                     >
                       Remove
                     </a>
