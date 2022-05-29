@@ -15,7 +15,7 @@ const MarkingScheme = () => {
 
   const cardList = () => {
     axios
-      .get(`${process.env.SERVER_BACKEND_URL}/markscheme/get`)
+      .get(`${process.env.SERVER_BACKEND_URL}/api/v1/markscheme/get`)
       .then((json) => {
         setData(json.data)
       })
@@ -32,7 +32,7 @@ const MarkingScheme = () => {
       'Are you sure you want to remove this MarkScheme'
     )
     if (result) {
-      const url = `${process.env.SERVER_BACKEND_URL}/markscheme/del/${id}`
+      const url = `${process.env.SERVER_BACKEND_URL}/api/v1/markscheme/del/${id}`
 
       axios
         .delete(url)
