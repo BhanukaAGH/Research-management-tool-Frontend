@@ -4,7 +4,12 @@ require('dotenv').config()
 const webpack = require('webpack')
 
 module.exports = {
-  mode: 'development',
+  mode: process.env.MODE,
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+  },
   entry: './index.js',
   output: {
     path: path.resolve(__dirname, 'public'),
