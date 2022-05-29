@@ -20,12 +20,6 @@ module.exports = {
     hot: true,
     liveReload: true,
     historyApiFallback: true,
-    proxy: {
-      '/api': {
-        target: process.env.SERVER_BACKEND_URL,
-        changeOrigin: true,
-      },
-    },
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json'],

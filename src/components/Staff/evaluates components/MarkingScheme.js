@@ -4,7 +4,6 @@ import {
   getEvaluation,
   reset,
 } from '../../../features/evaluation/evaluationSlice'
-import Spinner from '../../Spinner'
 
 const MarkingScheme = ({ groupId, evaluateMark, setEvaluateData }) => {
   const [markingScheme, setMarkingScheme] = useState(null)

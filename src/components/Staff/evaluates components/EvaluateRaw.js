@@ -11,11 +11,11 @@ const EvaluateRaw = ({ setSelectGroup, submission }) => {
     const getDetails = async () => {
       setLoading(true)
       const groupResponse = await axios.get(
-        `/api/v1/student/${submission.submitUserId}`
+        `${process.env.SERVER_BACKEND_URL}/api/v1/student/${submission.submitUserId}`
       )
       setGroupDetails(groupResponse.data)
       const topicResponse = await axios.get(
-        `/api/v1/topic/group/${groupResponse.data.groupID}`
+        `${process.env.SERVER_BACKEND_URL}/api/v1/topic/group/${groupResponse.data.groupID}`
       )
       setTopicDetails(topicResponse.data)
       setLoading(false)
