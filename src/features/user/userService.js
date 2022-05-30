@@ -1,7 +1,7 @@
 import axios from 'axios'
 import FormData from 'form-data'
 
-const API_URL = '/api/v1/users/'
+const API_URL = `${process.env.SERVER_BACKEND_URL}/api/v1/users/`
 
 // get loggin user info
 const getCurrentUser = async (userId) => {

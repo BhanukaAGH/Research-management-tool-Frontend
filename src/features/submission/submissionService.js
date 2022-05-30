@@ -1,7 +1,7 @@
 import axios from 'axios'
 import FormData from 'form-data'
 
-const API_URL = '/api/v1/submission'
+const API_URL = `${process.env.SERVER_BACKEND_URL}/api/v1/submission`
 
 // submit Document
 const submitDocument = async (submissionData, token) => {

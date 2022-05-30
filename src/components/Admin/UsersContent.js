@@ -21,7 +21,9 @@ function UsersContent() {
   // }
   //method to refresh table upon every change
   const tableList = () => {
-    axios.get('/api/v1/users/list').then((json) => setData(json.data))
+    axios
+      .get(`${process.env.SERVER_BACKEND_URL}/api/v1/users/list`)
+      .then((json) => setData(json.data))
   }
 
   useEffect(() => {
@@ -40,7 +42,7 @@ function UsersContent() {
         'Are you sure u want to remove all checked users ?'
       )
       if (result) {
-        const url = `/api/v1/users/deletem/${Uid}`
+        const url = `${process.env.SERVER_BACKEND_URL}/api/v1/users/deletem/${Uid}`
 
         axios
           .delete(url)
@@ -76,9 +78,9 @@ function UsersContent() {
     console.log(e.target.value)
     var url
     if (e.target.value == 'all') {
-      url = '/api/v1/users/list'
+      url = `${process.env.SERVER_BACKEND_URL}/api/v1/users/list`
     } else {
-      url = `/api/v1/users/findby/${e.target.value}`
+      url = `${process.env.SERVER_BACKEND_URL}/api/v1/users/findby/${e.target.value}`
     }
     axios.get(url).then((json) => setData(json.data))
   }

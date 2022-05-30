@@ -31,7 +31,7 @@ const StudentChats = () => {
         setLoading(true)
         try {
           const response = await axios.get(
-            `/api/v1/topic/group/${user.groupId}`
+            `${process.env.SERVER_BACKEND_URL}/api/v1/topic/group/${user.groupId}`
           )
           setTopic(response.data)
         } catch (error) {

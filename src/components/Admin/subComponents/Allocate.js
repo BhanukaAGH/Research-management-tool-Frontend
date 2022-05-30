@@ -9,13 +9,13 @@ const Allocate = ({ setAllocate, groupID }) => {
   const [panel, setPanel] = useState([]) //store panel details
 
   const tableList = async () => {
-    const url = `/api/v1/student/getgroups/${groupID}`
+    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/student/getgroups/${groupID}`
     await axios.get(url).then((json) => setGroup(json.data))
   }
 
   //get list of panel members
   const panelList = async () => {
-    const url = '/api/v1/users/findby/panel_member'
+    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/users/findby/panel_member`
     await axios.get(url).then((json) => setPanel(json.data))
   }
 
@@ -26,7 +26,7 @@ const Allocate = ({ setAllocate, groupID }) => {
 
   async function allocate(un) {
     // console.log("works",un,groupID)
-    const url = `/api/v1/student/update/${groupID}`
+    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/student/update/${groupID}`
 
     const res = await axios.patch(url, { Panelmember: un })
     //console.log(res.status);

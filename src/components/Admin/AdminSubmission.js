@@ -16,7 +16,9 @@ const AdminSubmission = () => {
 
   //method to refresh table upon every change
   const tableList = () => {
-    axios.get('/api/v1/subtype/list').then((json) => setData(json.data))
+    axios
+      .get(`${process.env.SERVER_BACKEND_URL}/api/v1/subtype/list`)
+      .then((json) => setData(json.data))
   }
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const AdminSubmission = () => {
   async function DeletSubtype(name, subtypeID) {
     const result = await confirm('Confirm if you want to delete user: ' + name)
     if (result) {
-      const url = `/api/v1/subtype/${subtypeID}`
+      const url = `${process.env.SERVER_BACKEND_URL}/api/v1/subtype/${subtypeID}`
       axios
         .delete(url)
         .then((response) => {

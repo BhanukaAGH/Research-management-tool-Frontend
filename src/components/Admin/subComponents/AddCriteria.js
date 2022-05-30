@@ -19,7 +19,7 @@ const AddCriteria = ({ setclickCriteria, ms, setms }) => {
   //to refresh criteria list
   const MarkSchemeData = () => {
     const id = ms._id
-    const url = `/api/v1/markscheme/getOne/${id}`
+    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/markscheme/getOne/${id}`
     axios.get(url).then((json) => {
       setms(json.data)
       console.log(json.data)
@@ -33,7 +33,7 @@ const AddCriteria = ({ setclickCriteria, ms, setms }) => {
   const onSubmit = async (data) => {
     //event.preventDefault()
     const id = ms._id
-    const url = `/api/v1/markscheme/update/${id}`
+    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/markscheme/update/${id}`
 
     await axios
       .patch(url, {
@@ -54,7 +54,7 @@ const AddCriteria = ({ setclickCriteria, ms, setms }) => {
   //delete criteria
   async function HandleDelete(Cid) {
     const id = ms._id
-    const url = `/api/v1/markscheme/remove/${id}`
+    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/markscheme/remove/${id}`
 
     const result = await confirm(
       'Are you sure you want to remove this Criteria'

@@ -4,7 +4,12 @@ require('dotenv').config()
 const webpack = require('webpack')
 
 module.exports = {
-  mode: 'development',
+  mode: process.env.MODE,
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+  },
   entry: './index.js',
   output: {
     path: path.resolve(__dirname, 'public'),
@@ -20,12 +25,6 @@ module.exports = {
     hot: true,
     liveReload: true,
     historyApiFallback: true,
-    proxy: {
-      '/api': {
-        target: process.env.SERVER_BACKEND_URL,
-        changeOrigin: true,
-      },
-    },
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json'],

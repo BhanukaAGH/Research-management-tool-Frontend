@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = '/api/v1/evaluate'
+const API_URL = `${process.env.SERVER_BACKEND_URL}/api/v1/evaluate`
 
 // create evaluation
 const createEvaluation = async (evaluationData, token) => {

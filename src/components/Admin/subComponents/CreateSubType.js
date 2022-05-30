@@ -30,7 +30,7 @@ const CreateSubType = ({ setClickEdit }) => {
     if (data.name === 'bill') {
       window.alert(data.name.length)
     }
-    const url = `/api/v1/subtype/create`
+    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/subtype/create`
     console.log('NAME', data.name)
     //console.log("details",Name,Type,Date,Description)
     // console.log("details", Name, Type, Date, Description);
