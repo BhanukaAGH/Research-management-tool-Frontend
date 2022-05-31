@@ -111,6 +111,7 @@ function UsersContent() {
         <tr
           className='border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-[#3a454b]'
           key={index}
+          onClick={tableList}
         >
           <td className='w-4 p-4'>
             <div className='flex items-center'>
@@ -220,13 +221,14 @@ function UsersContent() {
             refresh Table
           </button>
         </div>
-        <a onClick={tableList}>
+        
           <table
             id='myTable'
             className='w-full text-left text-sm text-gray-500 dark:text-gray-400'
           >
-            <thead className='bg-[#3a454b] text-xs uppercase text-[#e2a500] dark:bg-[#3a454b] dark:text-[#e2a500]'>
-              <tr>
+            
+            <thead  className='bg-[#3a454b] text-xs uppercase text-[#e2a500] dark:bg-[#3a454b] dark:text-[#e2a500]'>
+              <tr >
                 <th scope='col' className='p-4'>
                   <div className='flex items-center'></div>
                 </th>
@@ -258,10 +260,11 @@ function UsersContent() {
                 </th>
               </tr>
             </thead>
+            
 
             <tbody>{renderTable()}</tbody>
           </table>
-        </a>
+        
       </div>
       {clickEdit && <EditUser id={id} setClickEdit={setClickEdit} />}
       {registerUser && <Register setRegisterUser={setRegisterUser} />}
