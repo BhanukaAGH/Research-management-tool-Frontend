@@ -1,42 +1,80 @@
-import React, { useEffect, useState } from 'react'
-import { useSnackbar } from 'notistack'
-import axios from 'axios'
+import React, { useEffect, useState } from "react";
+import { useSnackbar } from "notistack";
+import axios from "axios";
+import { confirm } from "react-confirm-box";
 
 const Allocate = ({ setAllocate, groupID }) => {
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
 
-  const [group, setGroup] = useState([]) //set group details of seected group
-  const [panel, setPanel] = useState([]) //store panel details
+  const [group, setGroup] = useState([]); //set group details of seected group
+  const [panel, setPanel] = useState([]); //store panel details
+  const [allocated, setAllocated] = useState([]); //Alocated panel members
+  const [number, setNumber] = useState(""); //Alocated panel members
 
+  //get group details
   const tableList = async () => {
-    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/student/getgroups/${groupID}`
-    await axios.get(url).then((json) => setGroup(json.data))
-  }
+    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/student/getgroups/${groupID}`;
+    await axios.get(url).then((json) => {
+      setGroup(json.data);
+      setAllocated(json.data.Panelmember);
+      setNumber(json.data.Panelmember.length);
+    });
+  };
 
   //get list of panel members
   const panelList = async () => {
-    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/users/findby/panel_member`
-    await axios.get(url).then((json) => setPanel(json.data))
-  }
+    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/users/findby/panel_member`;
+    await axios.get(url).then((json) => setPanel(json.data));
+  };
 
   useEffect(() => {
-    tableList()
-    panelList()
-  }, [])
+    tableList();
+    panelList();
+  }, []);
 
-  async function allocate(un) {
+  async function allocate(un, ID) {
     // console.log("works",un,groupID)
-    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/student/update/${groupID}`
+    const found = allocated.some((el) => el.MemberID === ID);
+    if (found) {
+      enqueueSnackbar('This Member is Already Allocated"', { variant: "info" });
+      return;
+    }
 
-    const res = await axios.patch(url, { Panelmember: un })
-    //console.log(res.status);
-    if (res.status == 200) {
-      //console.log("updated")
-      enqueueSnackbar('Allocated', { variant: 'success' })
-      setAllocate(false)
+    const url = `${process.env.SERVER_BACKEND_URL}/api/v1/student/update/${groupID}`;
+
+    const res = await axios
+      .patch(url, {
+        Name: un,
+        MemberID: ID,
+      })
+      .then(function (response) {
+        console.log("response", response);
+        enqueueSnackbar(response.data.msg, { variant: "success" });
+        tableList();
+      })
+      .catch(function (error) {
+        console.log("error", error);
+        enqueueSnackbar(error.response.data.msg, { variant: "error" });
+      });
+  }
+
+  async function Unallocate() {
+    const result = await confirm("Un-Allocate All Panel Members");
+    if (result) {
+      const url = `${process.env.SERVER_BACKEND_URL}/api/v1/student/unallocate/${groupID}`;
+      const res = await axios
+        .patch(url)
+        .then(function (response) {
+          console.log("response", response);
+          enqueueSnackbar(response.data.msg, { variant: "success" });
+          tableList();
+        })
+        .catch(function (error) {
+          console.log("error", error);
+          enqueueSnackbar(error.response.data.msg, { variant: "error" });
+        });
     } else {
-      enqueueSnackbar('Allocation Failed', { variant: 'error' })
-      console.log('update failed')
+      enqueueSnackbar("No Change", { variant: "info" });
     }
   }
 
@@ -44,112 +82,103 @@ const Allocate = ({ setAllocate, groupID }) => {
     return panel.map((user, index) => {
       //display details
       return (
-        <tr
-          className='border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-[#3a454b]'
-          key={index}
-        >
-          <td className='w-4 p-4'>
-            <div className='flex items-center'></div>
-          </td>
-          <td className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'>
-            {user.name}
-          </td>
-          <td className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'>
+        <tr className="border-b bg-white" key={index}>
+          <td className="border px-6 py-4">{user.name}</td>
+          <td className="border px-6 py-4">
             <button
-              type='button'
+              type="button"
               onClick={() => {
-                allocate(user.name)
+                allocate(user.name, user._id);
               }}
-              className='mr-2 mb-2 rounded-lg  bg-[#e2a500] px-5 py-2.5 text-sm font-medium text-white hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 dark:focus:ring-yellow-900'
+              className="mr-2 mb-2 rounded-lg  bg-[#e2a500] px-5 py-2.5 text-sm font-medium text-white hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 dark:focus:ring-yellow-900"
             >
               Allocate
             </button>
           </td>
         </tr>
-      )
-    })
-  }
+      );
+    });
+  };
 
   return (
-    <div className='absolute inset-0 z-[5] min-w-full overflow-y-auto'>
-      <div className='relative flex h-full w-full items-center justify-center p-4'>
-        <div className='absolute inset-0 bg-gray-800 bg-opacity-50 transition-opacity'></div>
-
-        <div className=' w-full transform overflow-hidden rounded-lg  bg-white shadow-xl transition-all sm:my-8 sm:max-w-lg'>
-          <div className='relative rounded-lg bg-white shadow'>
-            <button
-              type='button'
-              className='absolute top-3 right-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900'
-              onClick={() => setAllocate(false)}
-            >
-              <svg
-                className='h-5 w-5'
-                fill='currentColor'
-                viewBox='0 0 20 20'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path
-                  fillRule='evenodd'
-                  d='M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z'
-                  clipRule='evenodd'
-                ></path>
-              </svg>
-            </button>
-            <div className='px-6 py-6 lg:px-8'>
-              <h3 className='mb-4 text-xl font-medium text-gray-900'>
-                Allocate Panel Member
-              </h3>
-              <center>
-                <p className='items-center justify-center font-medium dark:text-black'>
-                  Group ID:{group.groupID}
-                </p>
-              </center>
-
-              <div className='mb-6 grid gap-6 lg:grid-cols-2'>
-                <div className='mb-6'>
-                  <p className='font-medium dark:text-black '>
-                    Panel Member:{group.Panelmember}
-                  </p>
-                </div>
-              </div>
-
-              <div className='h-full w-full overflow-auto p-5'>
-                <button
-                  type='button'
-                  onClick={() => {
-                    allocate('Not Allocated')
-                  }}
-                  className='mr-2 mb-2 rounded-full bg-red-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900'
-                >
-                  Un-Allocate Member
-                </button>
-                <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
-                  <table
-                    id='myTable'
-                    className='w-full text-left text-sm text-gray-500 dark:text-gray-400'
-                  >
-                    <thead className='bg-[#3a454b] text-xs uppercase text-[#e2a500] dark:bg-[#3a454b] dark:text-[#e2a500]'>
-                      <tr>
-                        <th scope='col' className='p-4'>
-                          <div className='flex items-center'></div>
-                        </th>
-                        <th scope='col' className='px-6 py-3'>
-                          Name
-                        </th>
-                        <th scope='col' className='px-6 py-3'></th>
-                      </tr>
-                    </thead>
-
-                    <tbody>{renderTable()}</tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+    <div className="h-full w-full overflow-auto p-5  ">
+      <div className="mb-4 text-base">
+        <div
+          className="flex max-w-fit cursor-pointer items-center space-x-2 rounded-md bg-gray-700 px-4 py-1 text-slate-50 duration-500 hover:scale-105 hover:shadow-lg hover:shadow-gray-600"
+          onClick={() => setAllocate(false)}
+        >
+          <span>Back</span>
+        </div>
+        <br />
+        <div className="justify-left flex items-center">
+          <button
+            className="mr-2 bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-800 hover:bg-red-200  dark:bg-red-200 dark:text-red-800 dark:hover:bg-red-300"
+            onClick={Unallocate}
+          >
+            Un-Alllocate
+          </button>
+        </div>
+        <div className="mb-4 overflow-hidden bg-white shadow sm:rounded-lg">
+          <div className="px-4 py-5 sm:px-6">
+            <h3 className="text-lg font-medium leading-6 text-gray-900">
+              Allocate Panelmembers
+            </h3>
+            <p className="mt-1 max-w-2xl text-sm text-gray-500">
+              Group Details
+            </p>
           </div>
+
+          <div className="border-t border-gray-200">
+            <dl>
+              <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">Group ID:</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                  {group.groupID}
+                </dd>
+              </div>
+              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">
+                  Current Allocated
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                  {number}
+                </dd>
+              </div>
+
+              <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">
+                  Allocated List
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                  <ul class="w-48 rounded-lg bg-white text-sm font-medium  text-gray-900 ">
+                    {allocated.map((item, index) => (
+                      <li class="w-full rounded-t-lg border-b px-4 py-2">
+                        {item.Name}
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <h3 className="text-lg font-medium leading-6 text-gray-900">
+              All Panel Members
+            </h3>
+          <table className="w-full border-collapse text-left text-sm text-black">
+            <thead className="bg-gray-50 text-xs uppercase text-black">
+              <tr>
+                <th className="border px-6 py-3">Panelmember Name</th>
+                <th className="border px-6 py-3"></th>
+              </tr>
+            </thead>
+            <tbody>{renderTable()}</tbody>
+          </table>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Allocate
+export default Allocate;

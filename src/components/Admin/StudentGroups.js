@@ -58,8 +58,9 @@ const StudentGroups = () => {
             </ul>
           </td>
           <td className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'>
-            {user.Panelmember}
+            {user.Panelmember.length} 
           </td>
+
           <td className='px-6 py-4 text-right'>
             <a
               className='font-medium text-[#e2a500] hover:underline dark:text-[#e2a500]'
@@ -79,7 +80,13 @@ const StudentGroups = () => {
   return (
     <div className='h-full w-full overflow-auto p-5'>
       StudentGroups
-      <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
+      <br/>
+      {allocate && (
+        <Allocate
+        groupID={groupID} setAllocate={setAllocate} 
+        />
+      )}
+      {!allocate&&(<div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
         <div className='justify-left flex items-center'>
           <button
             className='mr-2 bg-yellow-100 px-2.5 py-0.5 text-xs font-semibold text-yellow-800 hover:bg-yellow-200  dark:bg-yellow-200 dark:text-yellow-800 dark:hover:bg-yellow-300'
@@ -114,7 +121,7 @@ const StudentGroups = () => {
                   Member 3
                 </th>
                 <th scope='col' className='px-6 py-3'>
-                  Panel_Member
+                  Allocated Panel_Member's
                 </th>
                 <th scope='col' className='px-6 py-3'>
                   <span className='sr-only'>Edit</span>
@@ -125,8 +132,8 @@ const StudentGroups = () => {
             <tbody>{renderTable()}</tbody>
           </table>
         </a>
-      </div>
-      {allocate && <Allocate groupID={groupID} setAllocate={setAllocate} />}
+      </div>)}
+      {/* {allocate && <Allocate groupID={groupID} setAllocate={setAllocate} />} */}
     </div>
   )
 }
