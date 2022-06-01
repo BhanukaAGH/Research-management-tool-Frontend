@@ -33,18 +33,24 @@ const TopicForm = ({ prevTopicData }) => {
 
   const onSubmit = () => {
     if (topicName && researchArea) {
-      const Data = {
-        topicId: prevTopicData._id,
-        topicData: {
+      if (!prevTopicData) {
+        const Data = {
           topicName,
           researchArea,
           groupId: user.groupId,
           studentId: user._id,
-        },
-      }
-      if (!prevTopicData) {
-        dispatch(createTopic(Data.topicData))
+        }
+        dispatch(createTopic(Data))
       } else {
+        const Data = {
+          topicId: prevTopicData._id,
+          topicData: {
+            topicName,
+            researchArea,
+            groupId: user.groupId,
+            studentId: user._id,
+          },
+        }
         dispatch(updateTopic(Data))
       }
     }

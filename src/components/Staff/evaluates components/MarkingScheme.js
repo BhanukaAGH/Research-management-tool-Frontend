@@ -22,7 +22,7 @@ const MarkingScheme = ({ groupId, evaluateMark, setEvaluateData }) => {
           return total
         }, 0) || 0
 
-      return Math.round(totalMarks / markingScheme.length)
+      return Math.round(totalMarks)
     }
     return 0
   }

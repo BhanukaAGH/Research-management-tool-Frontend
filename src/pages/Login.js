@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { login, reset } from '../features/auth/authSlice'
+import { selectTopic } from '../features/topic/topicSlice'
 import Spinner from '../components/Spinner'
 import SliitLogo from '../assets/logo.png'
 import { useSnackbar } from 'notistack'
@@ -23,6 +24,7 @@ const Login = () => {
     }
 
     if (isSuccess || user) {
+      dispatch(selectTopic(null))
       navigate('/dashboard')
     }
 
