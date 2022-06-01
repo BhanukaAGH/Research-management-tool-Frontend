@@ -1,7 +1,11 @@
-import React from 'react'
-
+import React from "react";
+import AcceptTopics from "./acceptTopics";
 const PanelTopics = () => {
-  return <div className='h-full w-full overflow-auto p-5'>PanelTopics</div>
-}
+  return (
+    <div className="h-full w-full overflow-auto p-5">
+      <AcceptTopics />
+    </div>
+  );
+};
 
-export default PanelTopics
+export default PanelTopics;
