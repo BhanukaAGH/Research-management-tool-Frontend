@@ -1,11 +1,38 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+import React, { useState, useEffect } from 'react'
+// import { useSelector } from 'react-redux'
+// import axios from 'axios'
+// import Spinner from '../Spinner'
 
 import StudentGroupDetails from './StudentGroup/StudentGroupDetails'
 import AddStudentGroup from './StudentGroup/AddStudentGroup'
 
 const StudentGroup = () => {
+  // const [loading, setLoading] = useState(false)
+  // const [groupData, setGroupData] = useState(null)
   const [showRegister, setShowRegister] = useState(false)
+
+  // const { user } = useSelector((store) => store.auth)
+
+  // const groupDetails = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.SERVER_BACKEND_URL}/api/v1/student/${user.userId}`
+  //     )
+  //     setGroupData(response.data)
+  //     console.log(groupData.groupID)
+  //   } catch (error) {
+  //     console.log(error.message)
+  //   }
+  //   setLoading(false)
+  // }
+  // useEffect(() => {
+  //   groupDetails()
+  // }, [])
+
+  // if (loading) {
+  //   return <Spinner />
+  // }
 
   return (
     <div className='h-full w-full overflow-auto p-5'>
