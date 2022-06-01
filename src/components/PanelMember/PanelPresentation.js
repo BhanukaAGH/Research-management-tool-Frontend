@@ -1,9 +1,28 @@
-import React from 'react'
+import React, { useState } from "react";
+import EvaluateTopicInfo from "./presentation component/EvaluateTopicInfo";
+import TopicList from "./presentation component/TopicList";
 
 const PanelPresentation = () => {
-  return (
-    <div className='h-full w-full overflow-auto p-5'>PanelPresentation</div>
-  )
-}
+  const [isShow, setIsShow] = useState(true);
+  const [info, setInfo] = useState([]);
 
-export default PanelPresentation
+  const showOtherPart = (list) => {
+    setIsShow(false);
+    setInfo(list);
+  };
+
+  const close = () => {
+    setIsShow(true);
+  };
+  return (
+    <div className="h-full w-full overflow-auto p-5">
+      {isShow ? (
+        <TopicList displayData={showOtherPart} />
+      ) : (
+        <EvaluateTopicInfo displayData={close} data={info} />
+      )}
+    </div>
+  );
+};
+
+export default PanelPresentation;
