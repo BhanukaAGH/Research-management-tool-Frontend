@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
+import axios from 'axios'
+import { useSnackbar } from 'notistack'
 
-const AddStudentGroup = () => {
+const AddStudentGroup = ({ setGroupData }) => {
+  const { enqueueSnackbar } = useSnackbar()
+
   const [student, setStudent] = useState({
     leaderStudentID: '',
     member2StudentID: '',
@@ -26,32 +30,40 @@ const AddStudentGroup = () => {
     }
 
     axios
-      .post('/api/v1/student/groupRegister', newGroup)
-      .then(() => {
-        //swal('Added!', 'You have successfully added an employee', 'success')
-        alert('Group added')
-        // console.log(res.data)
+      .post(
+        `${process.env.SERVER_BACKEND_URL}/api/v1/student/groupRegister`,
+        newGroup
+      )
+      .then((res) => {
+        enqueueSnackbar('Group Succesfully Registered', { variant: 'success' })
+        setGroupData(res.data)
       })
-      .catch((err) => {
-        alert(err)
+      .catch((error) => {
+        enqueueSnackbar(error.message, { variant: 'error' })
       })
   }
 
   return (
     <div className='h-full w-full overflow-auto p-5'>
-      <form>
-        <div className='mb-6'>
-          <label
-            htmlFor='StudentID'
-            className='mb-2 block text-sm font-medium text-gray-900 '
-          >
-            Leader(member 1) Student ID
-          </label>
+      <div> Student Group Registration</div>
+      <br />
+
+      <form className='rounded-md bg-gray-300 p-4'>
+        <div className='mb-6 flex flex-row'>
+          <div className='basis-1/3'>
+            <label
+              htmlFor='StudentID'
+              className='mb-2  block  text-sm font-medium text-gray-900'
+            >
+              Leader(member 1) Student ID
+            </label>
+          </div>
+
           <input
             type='text'
             id='leaderStudentID'
             name='leaderStudentID'
-            className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+            className=' block w-full  rounded-lg border border-gray-300 bg-gray-50 p-2.5  text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
             placeholder='ITXXXXXXXX'
             required=''
             value={student.leaderStudentID}
@@ -59,13 +71,15 @@ const AddStudentGroup = () => {
           />
         </div>
 
-        <div className='mb-6'>
-          <label
-            htmlFor='StudentID'
-            className='mb-2 block text-sm font-medium text-gray-900 '
-          >
-            Member 2 Student ID
-          </label>
+        <div className='mb-6 flex flex-row'>
+          <div className='basis-1/3'>
+            <label
+              htmlFor='StudentID'
+              className='mb-2 block text-sm font-medium text-gray-900 '
+            >
+              Member 2 Student ID
+            </label>
+          </div>
           <input
             type='text'
             id='member2StudentID'
@@ -78,13 +92,15 @@ const AddStudentGroup = () => {
           />
         </div>
 
-        <div className='mb-6'>
-          <label
-            htmlFor='StudentID'
-            className='mb-2 block text-sm font-medium text-gray-900 '
-          >
-            Member 3 Student ID
-          </label>
+        <div className='mb-6 flex flex-row'>
+          <div className='basis-1/3'>
+            <label
+              htmlFor='StudentID'
+              className='mb-2 block text-sm font-medium text-gray-900 '
+            >
+              Member 3 Student ID
+            </label>
+          </div>
           <input
             type='text'
             id='member3StudentID'
@@ -97,13 +113,15 @@ const AddStudentGroup = () => {
           />
         </div>
 
-        <div className='mb-6'>
-          <label
-            htmlFor='StudentID'
-            className='mb-2 block text-sm font-medium text-gray-900 '
-          >
-            Member 4 Student ID
-          </label>
+        <div className='mb-6 flex flex-row'>
+          <div className='basis-1/3'>
+            <label
+              htmlFor='StudentID'
+              className='mb-2 block text-sm font-medium text-gray-900 '
+            >
+              Member 4 Student ID
+            </label>
+          </div>
           <input
             type='text'
             id='member4StudentID'
@@ -115,14 +133,15 @@ const AddStudentGroup = () => {
             onChange={handleChange}
           />
         </div>
-
-        <button
-          type='submit'
-          className='w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto'
-          onClick={handleSubmit}
-        >
-          Submit
-        </button>
+        <div className='flex justify-center'>
+          <button
+            type='submit'
+            className=' mr-2 mb-2 rounded-lg bg-[#e2a500]  px-5 py-2.5 text-sm font-medium text-white hover:bg-yellow-500 focus:outline-none'
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   )
