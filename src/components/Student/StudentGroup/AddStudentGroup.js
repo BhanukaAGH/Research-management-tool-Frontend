@@ -23,10 +23,10 @@ const AddStudentGroup = ({ setGroupData }) => {
     e.preventDefault()
 
     const newGroup = {
-      leaderId: student.leaderStudentID,
-      member2Id: student.member2StudentID,
-      member3Id: student.member3StudentID,
-      member4Id: student.member4StudentID,
+      leaderId: student.leaderStudentID.toUpperCase(),
+      member2Id: student.member2StudentID.toUpperCase(),
+      member3Id: student.member3StudentID.toUpperCase(),
+      member4Id: student.member4StudentID.toUpperCase(),
     }
 
     axios
@@ -39,7 +39,7 @@ const AddStudentGroup = ({ setGroupData }) => {
         setGroupData(res.data)
       })
       .catch((error) => {
-        enqueueSnackbar(error.message, { variant: 'error' })
+        enqueueSnackbar(error.response.data.msg, { variant: 'error' })
       })
   }
 

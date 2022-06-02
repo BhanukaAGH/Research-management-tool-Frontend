@@ -26,7 +26,7 @@ const StudentGroupDetails = ({ groupData }) => {
           </thead>
 
           <tbody>
-            <tr className='cursor-pointer border-b bg-white hover:bg-gray-200'>
+            <tr className=' border-b bg-white hover:bg-gray-200'>
               <th className='truncate whitespace-normal px-6 py-4 font-medium text-gray-900'>
                 leader (member 1)
               </th>
@@ -34,7 +34,7 @@ const StudentGroupDetails = ({ groupData }) => {
               <td className='px-6 py-4'>{groupData.leader.regNo}</td>
               <td className='px-6 py-4'>{groupData.leader.email}</td>
             </tr>
-            <tr className='cursor-pointer border-b bg-white hover:bg-gray-200'>
+            <tr className=' border-b bg-white hover:bg-gray-200'>
               <th className='truncate whitespace-normal px-6 py-4 font-medium text-gray-900'>
                 member 2
               </th>
@@ -42,7 +42,7 @@ const StudentGroupDetails = ({ groupData }) => {
               <td className='px-6 py-4'>{groupData.member2.regNo}</td>
               <td className='px-6 py-4'>{groupData.member2.email}</td>
             </tr>
-            <tr className='cursor-pointer border-b bg-white hover:bg-gray-200'>
+            <tr className=' border-b bg-white hover:bg-gray-200'>
               <th className='truncate whitespace-normal px-6 py-4 font-medium text-gray-900'>
                 member 3
               </th>
@@ -50,7 +50,7 @@ const StudentGroupDetails = ({ groupData }) => {
               <td className='px-6 py-4'>{groupData.member3.regNo}</td>
               <td className='px-6 py-4'>{groupData.member3.email}</td>
             </tr>
-            <tr className='cursor-pointer border-b bg-white hover:bg-gray-200'>
+            <tr className=' border-b bg-white hover:bg-gray-200'>
               <th className='truncate whitespace-normal px-6 py-4 font-medium text-gray-900'>
                 member 4
               </th>
