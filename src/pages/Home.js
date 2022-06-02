@@ -1,11 +1,27 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import Footer from '../components/Home/Footer'
 import Navbar from '../components/Home/Navbar'
 import SLIITLOGO from '../assets/sliit_logo.png'
 
+const HomeVariants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.5 },
+  },
+}
+
 const Home = () => {
   return (
-    <div className='min-h-screen bg-gray-100'>
+    <motion.div
+      className='min-h-screen bg-gray-100'
+      variants={HomeVariants}
+      initial='hidden'
+      animate='visible'
+    >
       <div className='relative'>
         <Navbar />
         <main className='flex h-[calc(100vh-52px)] items-center justify-center bg-gradient-to-r from-slate-400 via-slate-200 to-slate-400'>
@@ -41,7 +57,7 @@ const Home = () => {
         </main>
         <Footer />
       </div>
-    </div>
+    </motion.div>
   )
 }
 

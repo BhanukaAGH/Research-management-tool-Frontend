@@ -6,6 +6,17 @@ import { selectTopic } from '../features/topic/topicSlice'
 import Spinner from '../components/Spinner'
 import SliitLogo from '../assets/logo.png'
 import { useSnackbar } from 'notistack'
+import { motion } from 'framer-motion'
+
+const LoginVariants = {
+  hidden: {
+    scale: 0,
+  },
+  visible: {
+    scale: 1,
+    transition: { duration: 0.2 },
+  },
+}
 
 const Login = () => {
   const { enqueueSnackbar } = useSnackbar()
@@ -48,7 +59,12 @@ const Login = () => {
   return (
     <div className='flex min-h-screen items-center bg-gradient-to-r from-slate-400 via-slate-200 to-slate-400'>
       <div className='container mx-auto'>
-        <div className='mx-auto mb-10 max-w-md'>
+        <motion.div
+          className='mx-auto mb-10 max-w-md'
+          variants={LoginVariants}
+          initial='hidden'
+          animate='visible'
+        >
           <div className='flex flex-col items-center text-center'>
             <img
               src={SliitLogo}
@@ -106,7 +122,7 @@ const Login = () => {
               </div>
             </form>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   )
