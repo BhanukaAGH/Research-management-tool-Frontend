@@ -7,15 +7,17 @@ import {
   deleteObject,
 } from 'firebase/storage'
 import { storage } from '../../firebase-config'
-
+import Spinner from '../Spinner'
 
 const StudentTemplates = () => {
-const [uploads, setUploads] = useState([]) //to store all documents from firebase storage
+  const [loading, setLoading] = useState(true)
+  const [uploads, setUploads] = useState([]) //to store all documents from firebase storage
 
-var filesRef = ref(storage, 'files/') //refernce to all files in folder file
-
+  var filesRef = ref(storage, 'files/') //refernce to all files in folder file
 
   const List = () => {
+    // setLoading(true)
+
     listAll(filesRef).then((response) => {
       response.items.forEach((item) => {
         const name = item.name
@@ -30,13 +32,22 @@ var filesRef = ref(storage, 'files/') //refernce to all files in folder file
         })
       })
     })
+
+    setLoading(false)
   }
   useEffect(() => {
     List()
   }, [])
 
-  return <div className='h-full w-full overflow-auto p-5'>StudentTemplates
-    <p className='text-sm text-red-500'>Click On File Name to Download</p>
+  if (uploads.length === 0) {
+    return <Spinner />
+  }
+
+  return (
+    <div className='h-full w-full overflow-auto p-5'>
+      StudentTemplates
+      <p className='text-sm text-red-500'>Click On File Name to Download</p>
+      <br />
       <div className='grid grid-cols-4 gap-4'>
         {uploads.map((up) => {
           return (
@@ -57,9 +68,8 @@ var filesRef = ref(storage, 'files/') //refernce to all files in folder file
           )
         })}
       </div>
-  
-  
-  </div>
+    </div>
+  )
 }
 
 export default StudentTemplates
