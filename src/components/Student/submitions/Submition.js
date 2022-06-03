@@ -131,7 +131,7 @@ const Submition = ({ selectSubmition, setSelectSubmition }) => {
               Time Remaining
             </dt>
             <dd className='mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
-              {moment(selectSubmition.dueDate, 'MMDDYYYY').fromNow()}
+              {moment(new Date(selectSubmition.dueDate), 'MMDDYYYY').fromNow()}
             </dd>
           </div>
           {submission && (
