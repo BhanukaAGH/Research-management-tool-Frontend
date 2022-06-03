@@ -175,7 +175,7 @@ function UsersContent() {
   }
   return (
     <div className='h-full w-full overflow-auto p-5'>
-      User Managment{Uid}
+      User Managment
       <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
         <div className='p-4'>
           <label htmlFor='table-search' className='sr-only'>
