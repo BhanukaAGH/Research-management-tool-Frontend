@@ -8,6 +8,7 @@ import {
 } from 'firebase/storage'
 import { storage } from '../../firebase-config'
 import Spinner from '../Spinner'
+import { FaDownload } from 'react-icons/fa'
 
 const StudentTemplates = () => {
   const [loading, setLoading] = useState(true)
@@ -45,7 +46,7 @@ const StudentTemplates = () => {
 
   return (
     <div className='h-full w-full overflow-auto p-5'>
-      StudentTemplates
+      Student Templates
       <p className='text-sm text-red-500'>Click On File Name to Download</p>
       <br />
       <div className='grid grid-cols-4 gap-4'>
@@ -57,11 +58,17 @@ const StudentTemplates = () => {
             >
               <div className='url'>
                 <br />
+
                 <a href={up.url}>
+                  <span>
+                    {' '}
+                    <FaDownload />
+                  </span>
                   <h5 className='mb-2 text-lg tracking-tight text-black '>
-                    Name:{up.name}
+                    Name: {up.name}
                   </h5>
                 </a>
+
                 <br />
               </div>
             </div>
