@@ -119,7 +119,17 @@ function UsersContent() {
                 id={user._id}
                 value={user._id}
                 checked={Uid.some((val) => val === user._id)}
-                onChange={handleUidchange}
+                onChange={
+                  (e) => {
+                    if (user.role == 'admin') {
+                      console.log(user.role)
+                      window.alert("admin cannot be selected for delete")
+                    }else{
+                      console.log("else",Uid)
+                      handleUidchange(e)
+                    }
+                }
+              }
                 type='checkbox'
                 className='h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-yellow-600'
               ></input>
@@ -165,7 +175,7 @@ function UsersContent() {
   }
   return (
     <div className='h-full w-full overflow-auto p-5'>
-      User Managment
+      User Managment{Uid}
       <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
         <div className='p-4'>
           <label htmlFor='table-search' className='sr-only'>
