@@ -15,6 +15,8 @@ const TopicInfo = ({
   createdAt,
   group,
   setLoading,
+  allocated,
+  panel,
 }) => {
   const [details] = group
   const { regNo, email, name: StudentName } = details.leader
@@ -31,22 +33,19 @@ const TopicInfo = ({
 
   const fetchPanelTopic = async () => {
     axios
-      .get(
-        `${process.env.SERVER_BACKEND_URL}/api/v1/panel/getTopicStatus/${details._id}`
-      )
-      .then((response) => {
-        const {
-          data: { topicStatus },
-        } = response
+    const res = await axios.get(
+      `${process.env.SERVER_BACKEND_URL}/api/v1/panel/getTopicStatus/${details._id}`
+    )
 
-        if (typeof topicStatus.topicStatus === 'null') {
-          return setStatus('Pending')
-        } else {
-          setStatus(topicStatus.topicStatus)
-          setApprovedDate(topicStatus.dateAppordeOrReject)
-          setIscheck(true)
-        }
-      })
+    const { topicInfo } = res.data
+
+    if (Object.keys(topicInfo).length === 0) {
+      return setStatus('Pending')
+    } else {
+      setStatus(topicInfo.topicStatus)
+      setApprovedDate(topicInfo.dateAppordeOrReject)
+      setIscheck(true)
+    }
   }
 
   const fetchDocument = async () => {
@@ -61,31 +60,39 @@ const TopicInfo = ({
       setError(false)
       return
     } else {
-      const {
-        data: {
-          document: { submitFileName, submitDocumentUrl },
-        },
-      } = res
-      const info = {
-        submitFileName,
-        submitDocumentUrl,
-      }
+      const { document } = res.data
 
-      setDocument(info)
+      const pdf = document.find((el) => el.submitFileName.includes('pdf'))
+
+      if (pdf) {
+        const { submitFileName, submitDocumentUrl } = pdf
+
+        const info = {
+          submitFileName,
+          submitDocumentUrl,
+        }
+
+        setDocument(info)
+        return
+      } else {
+        setError(false)
+      }
     }
   }
 
   useEffect(() => {
     fetchPanelTopic()
     fetchDocument()
-  }, [status])
+  }, [])
 
   const sendDate = async () => {
     const allDate = {
       topicStatus: btnValue,
       groupID: details._id,
       topicID: _id,
+      panelMember: panel,
     }
+
     const response = await axios.post(
       `${process.env.SERVER_BACKEND_URL}/api/v1/panel/topicAcceptOrReject`,
       allDate
@@ -135,7 +142,20 @@ const TopicInfo = ({
         <p className='text-base '>Group Id:{details.groupID}</p>
       </div>
       <p className='text-base'>Submitted At: {date.toDateString()}</p>
-      <p className='text-base'>Panel Member Approval: {status}</p>
+      <p className='text-base'>
+        Panel Member Approval:
+        <span
+          className={`ml-2  rounded px-2.5 py-0.5 text-base font-semibold ${
+            status === 'Accept'
+              ? 'bg-green-200 text-green-800'
+              : status === 'Reject'
+              ? 'bg-red-200 text-red-800'
+              : 'bg-blue-200 text-blue-800'
+          }`}
+        >
+          {status}
+        </span>
+      </p>
       {ischeck ? (
         <p className='text-base'>
           Panel member {status} At:{dateApproved.toDateString()}{' '}
@@ -172,24 +192,39 @@ const TopicInfo = ({
       <div className='mt-3 flex items-center  justify-between'>
         <button
           type='submit'
-          className='topic-btn bg-green-500  hover:bg-green-700'
+          className={`topic-btn ${
+            allocated
+              ? 'cursor-pointer bg-green-500 hover:bg-green-700 '
+              : ' bg-green-300'
+          } `}
           onClick={() => passValue('Accept')}
+          disabled={!allocated}
         >
           Accept
         </button>
 
         <button
           type='submit'
-          className='topic-btn bg-red-600    hover:bg-red-700 '
+          className={`topic-btn ${
+            allocated
+              ? 'cursor-pointer bg-red-600  hover:bg-red-700 '
+              : ' bg-red-300'
+          } `}
           onClick={() => passValue('Reject')}
+          disabled={!allocated}
         >
           Reject
         </button>
 
         <button
           type='submit'
-          className='topic-btn bg-yellow-400    hover:bg-yellow-600 '
+          className={`topic-btn ${
+            allocated
+              ? 'cursor-pointer bg-yellow-400  hover:bg-yellow-600 '
+              : ' bg-yellow-300'
+          } `}
           onClick={showEmailModel}
+          disabled={!allocated}
         >
           Send Feedback
         </button>
