@@ -12,6 +12,7 @@ import { MdKeyboardBackspace, MdCheck } from 'react-icons/md'
 import FileSubmition from './FileSubmition'
 import { useSnackbar } from 'notistack'
 import Spinner from '../../Spinner'
+import Progress from '../../Progress'
 
 const Submition = ({ selectSubmition, setSelectSubmition }) => {
   const [selectFile, setSelectFile] = useState(null)
@@ -21,7 +22,7 @@ const Submition = ({ selectSubmition, setSelectSubmition }) => {
   const { submission, isLoading, isSuccess, isError, message } = useSelector(
     (state) => state.submission
   )
-  const { submit } = useSelector((state) => state.ui)
+  const { submit, uploading } = useSelector((state) => state.ui)
 
   useEffect(() => {
     dispatch(getSubmission(selectSubmition._id))
@@ -52,8 +53,12 @@ const Submition = ({ selectSubmition, setSelectSubmition }) => {
     dispatch(reset())
   }, [isSuccess, isError, message, dispatch])
 
-  if (isLoading) {
+  if (isLoading && !uploading) {
     return <Spinner />
+  }
+
+  if (uploading) {
+    return <Progress />
   }
 
   return (
@@ -176,7 +181,9 @@ const Submition = ({ selectSubmition, setSelectSubmition }) => {
         </dl>
       </div>
 
-      {submit && <FileSubmition setSelectFile={setSelectFile} />}
+      {submit && (
+        <FileSubmition selectFile={selectFile} setSelectFile={setSelectFile} />
+      )}
     </div>
   )
 }
