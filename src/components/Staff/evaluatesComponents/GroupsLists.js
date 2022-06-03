@@ -38,13 +38,15 @@ const GroupsLists = ({ setSelectGroup }) => {
             </thead>
 
             <tbody>
-              {submissions.map((submission, index) => (
-                <EvaluateRaw
-                  key={index}
-                  setSelectGroup={setSelectGroup}
-                  submission={submission}
-                />
-              ))}
+              {submissions
+                .filter((item) => item.submissionType === 'document')
+                .map((submission, index) => (
+                  <EvaluateRaw
+                    key={index}
+                    setSelectGroup={setSelectGroup}
+                    submission={submission}
+                  />
+                ))}
             </tbody>
           </table>
         </div>

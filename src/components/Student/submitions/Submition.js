@@ -31,6 +31,7 @@ const Submition = ({ selectSubmition, setSelectSubmition }) => {
         submissionId: selectSubmition._id,
         submissionName: selectSubmition.name,
         submissionDescription: selectSubmition.description,
+        submissionType: selectSubmition.type,
       }
       const data = {
         document: selectFile,
