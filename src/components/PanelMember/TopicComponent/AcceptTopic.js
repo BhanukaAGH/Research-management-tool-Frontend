@@ -9,6 +9,9 @@ const AcceptTopic = ({ topic, setLoading }) => {
 
   const [show, setShow] = useState(false)
   const [group, setGroup] = useState([])
+  const [allocated, setAllocated] = useState(false)
+  const [panel, setPanel] = useState([])
+
   const topicInformation = {
     _id,
     researchArea,
@@ -23,6 +26,15 @@ const AcceptTopic = ({ topic, setLoading }) => {
     )
     const { groupDetails } = res.data
     setGroup(groupDetails)
+    const [a] = groupDetails
+
+    if (a.Panelmember.length != 0) {
+      setAllocated(true)
+      setPanel(a.Panelmember)
+      return
+    } else {
+      return
+    }
   }
 
   useEffect(() => {
@@ -32,7 +44,7 @@ const AcceptTopic = ({ topic, setLoading }) => {
   return (
     <article className='mb-3 rounded-md border-2 border-gray-400 bg-stone-50 p-4 '>
       <div className=' flex items-center justify-between'>
-        <h1 className='text-sm lg:text-lg'>Topic Name: {topicName}</h1>
+        <h1 className='text-sm text-lg'>Topic Name: {topicName}</h1>
         <button onClick={() => setShow(!show)}>
           {show ? (
             <FaRegArrowAltCircleUp className='cursor-pointer' />
@@ -41,7 +53,29 @@ const AcceptTopic = ({ topic, setLoading }) => {
           )}
         </button>
       </div>
-      {show && <TopicInfo {...topicInformation} setLoading={setLoading} />}
+      {allocated ? (
+        panel.map((panel, index) => {
+          console.log(panel)
+          return (
+            <p key={index} className='text-sm text-sky-600'>
+              Allocated Panel Member Name : {panel.Name}
+            </p>
+          )
+        })
+      ) : (
+        <p className='text-sm '>
+          Allocated panel member :{' '}
+          <span className='text-red-500'>Not allocated</span>
+        </p>
+      )}
+      {show && (
+        <TopicInfo
+          {...topicInformation}
+          setLoading={setLoading}
+          allocated={allocated}
+          panel={panel}
+        />
+      )}
     </article>
   )
 }

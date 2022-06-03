@@ -100,7 +100,7 @@ const SendFeedBack = (props) => {
               type='text'
               name='Registration_Number'
               className='w-96 rounded-lg border border-gray-400 px-4 py-2 text-lg'
-              value={studentRegNo}
+              defaultValue={values.Registration_Number}
               onChange={handleChange}
             />
           </div>
@@ -116,8 +116,8 @@ const SendFeedBack = (props) => {
               type='email'
               name='To_whom'
               className='w-96 rounded-lg border border-gray-400 px-4 py-2 text-lg'
-              value={studentEmail}
               onChange={handleChange}
+              defaultValue={values.To_whom}
             />
           </div>
           <div className='mt-2'>
