@@ -15,7 +15,11 @@ export const submitDocument = createAsyncThunk(
   async (submissionData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.token
-      return await submissionService.submitDocument(submissionData, token)
+      return await submissionService.submitDocument(
+        submissionData,
+        token,
+        thunkAPI
+      )
     } catch (error) {
       const message = error.response.data.msg || error.message
       return thunkAPI.rejectWithValue(message)

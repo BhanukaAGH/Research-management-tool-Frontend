@@ -5,6 +5,8 @@ const initialState = {
   submit: false,
   selectFile: null,
   createTopicState: false,
+  uploading: false,
+  progress: 0,
 }
 
 export const uiSlice = createSlice({
@@ -23,6 +25,12 @@ export const uiSlice = createSlice({
     setCreateTopic: (state, action) => {
       state.createTopicState = action.payload
     },
+    setUploading: (state, action) => {
+      state.uploading = action.payload
+    },
+    setProgress: (state, action) => {
+      state.progress = action.payload
+    },
   },
 })
 
@@ -31,5 +39,7 @@ export const {
   submitSubmission,
   setSelectFile,
   setCreateTopic,
+  setUploading,
+  setProgress,
 } = uiSlice.actions
 export default uiSlice.reducer
