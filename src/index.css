@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .topic-btn {
-  @apply cursor-pointer rounded-lg py-1 px-3 text-lg font-bold  text-white transition duration-500 ease-out;
+  @apply rounded-lg py-1 px-3 text-lg font-bold  text-white transition duration-500 ease-out;
 }
 
 @layer utilities {

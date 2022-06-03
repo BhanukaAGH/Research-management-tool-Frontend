@@ -3,6 +3,9 @@ import { useDispatch } from "react-redux";
 import { createEvaluation } from "../../../features/evaluation/evaluationSlice";
 import { MdKeyboardBackspace, MdCheck } from "react-icons/md";
 import MarkingScheme from "./MarkingScheme";
+import { FaRegArrowAltCircleDown } from "react-icons/fa";
+import { MdOutlineAttachFile } from "react-icons/md";
+import axios from "axios";
 
 const EvaluvateTopicInfo = ({ displayData, data }) => {
   const [values] = data;
@@ -13,12 +16,51 @@ const EvaluvateTopicInfo = ({ displayData, data }) => {
 
   const [evaluateMark, setEvaluateMark] = useState(false);
   const [evaluateData, setEvaluateData] = useState(null);
+  const [error, setError] = useState(true);
+  const [document, setDocument] = useState({});
   const closeModel = () => {
     displayData();
   };
 
   const dispatch = useDispatch();
+  const fetchPresentationDocument = async () => {
+    const res = await axios.get(
+      `${process.env.SERVER_BACKEND_URL}/api/v1/panel/getSubmittedDocument/${groupId}`
+    );
+    const { document } = res.data;
 
+    if (
+      Object.keys(res.data.document).length === 0 &&
+      Object.getPrototypeOf(document) === Object.prototype
+    ) {
+      setError(false);
+      return;
+    } else {
+      const { document } = res.data;
+      console.log(document);
+      const ppt = document.find((el) =>
+        el.submitFileName.includes("ppt" || "pptx")
+      );
+      if (ppt) {
+        const { submitFileName, submitDocumentUrl } = ppt;
+
+        const info = {
+          submitFileName,
+          submitDocumentUrl,
+        };
+
+        setDocument(info);
+        return;
+      } else {
+        setError(false);
+        return;
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchPresentationDocument();
+  }, []);
   //create a evaluate marking scheme only button value(evaluateMark) changed
   useEffect(() => {
     if (!evaluateMark && evaluateData) {
@@ -125,6 +167,35 @@ const EvaluvateTopicInfo = ({ displayData, data }) => {
           </dl>
         </div>
       </div>
+      <div className="mt-4 mb-4 rounded-lg border-2 border-gray-400 bg-stone-50 p-5">
+        <h2 className="mb-4 text-lg font-medium ">
+          Submitted Presentation File
+        </h2>
+        {error ? (
+          <div className="flex items-center justify-between text-base">
+            <p>File name:</p>
+            <MdOutlineAttachFile className="h-5 w-5 flex-shrink-0 text-gray-400" />
+
+            <span className="ml-2 w-0 flex-1 truncate">
+              {document.submitFileName}
+            </span>
+            <div
+              className="hover:red-indigo-500 flex cursor-pointer items-center justify-between gap-2 text-red-600 "
+              onClick={() =>
+                saveAs(document.submitDocumentUrl, document.submitFileName)
+              }
+            >
+              <FaRegArrowAltCircleDown className=" " />
+              <span className=" font-medium ">Download</span>
+            </div>
+          </div>
+        ) : (
+          <h4 className="text-sm">
+            This group still not submit the Presentation file.
+          </h4>
+        )}
+      </div>
+
       <h3 className="mb-3 text-lg font-medium leading-6 text-gray-900">
         Presentation Marking Scheme
       </h3>

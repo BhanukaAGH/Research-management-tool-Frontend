@@ -8,6 +8,7 @@ const PopModel = (props) => {
     props.model();
     props.send();
     props.fetchPanelTopic();
+    console.log("From closed model");
   };
 
   return (
@@ -17,7 +18,7 @@ const PopModel = (props) => {
           Do You Want to {props.name} this topic ?
         </h1>
         <p className="mt-2 text-lg">
-          Please make sure to make the correct desicion
+          Please make sure to make the correct decision
         </p>
         <div className="mt-3 flex items-center justify-between">
           <button
