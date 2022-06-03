@@ -44,7 +44,7 @@ const AcceptTopic = ({ topic, setLoading }) => {
   return (
     <article className='mb-3 rounded-md border-2 border-gray-400 bg-stone-50 p-4 '>
       <div className=' flex items-center justify-between'>
-        <h1 className='text-sm text-lg'>Topic Name: {topicName}</h1>
+        <h1 className='text-sm lg:text-lg'>Topic Name: {topicName}</h1>
         <button onClick={() => setShow(!show)}>
           {show ? (
             <FaRegArrowAltCircleUp className='cursor-pointer' />
