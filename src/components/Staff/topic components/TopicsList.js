@@ -87,22 +87,23 @@ const TopicsList = () => {
                         </td>
                         <td className='px-6 py-4'>
                           <span
-                            className={`rounded  px-2.5 py-0.5 text-sm font-semibold  ${
-                              user &&
-                              user.role === 'supervisor' &&
-                              topic.supervisor.status === 'approve'
-                                ? 'bg-green-200 text-green-800'
-                                : topic.supervisor.status === 'reject'
-                                ? 'bg-red-200 text-red-800'
-                                : 'bg-blue-200 text-blue-800'
-                            } ${
-                              user &&
-                              user.role === 'co_supervisor' &&
-                              topic.coSupervisor.status === 'approve'
+                            className={`rounded px-2.5 py-0.5 text-sm font-semibold ${
+                              user && user.role === 'supervisor'
+                                ? topic.supervisor.status === 'approve'
+                                  ? 'bg-green-200 text-green-800'
+                                  : topic.supervisor.status === 'reject'
+                                  ? 'bg-red-200 text-red-800'
+                                  : topic.supervisor.status === 'pending'
+                                  ? 'bg-blue-200 text-blue-800'
+                                  : ''
+                                : user.role === 'co_supervisor' &&
+                                  topic.coSupervisor.status === 'approve'
                                 ? 'bg-green-200 text-green-800'
                                 : topic.coSupervisor.status === 'reject'
                                 ? 'bg-red-200 text-red-800'
-                                : 'bg-blue-200 text-blue-800'
+                                : topic.coSupervisor.status === 'pending'
+                                ? 'bg-blue-200 text-blue-800'
+                                : ''
                             }`}
                           >
                             {user &&
