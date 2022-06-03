@@ -141,9 +141,8 @@ const CreateSubType = ({ setClickEdit }) => {
                     {...register('type')}
                   >
                     <option value=''>Select Type</option>
-                    <option value='.ppt'>ppt</option>
-                    <option value='.word'>word doc</option>
-                    <option value='.pdf'>pdf</option>
+                    <option value='document'>document</option>
+                    <option value='presentation'>presentation</option>
                   </select>
                 </div>
 
