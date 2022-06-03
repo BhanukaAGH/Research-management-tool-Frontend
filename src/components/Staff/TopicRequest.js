@@ -1,6 +1,6 @@
 import React from 'react'
-import SelectedTopic from './topic components/SelectedTopic'
-import TopicsList from './topic components/TopicsList'
+import SelectedTopic from './topicComponents/SelectedTopic'
+import TopicsList from './topicComponents/TopicsList'
 import { useSelector } from 'react-redux'
 
 const TopicRequest = () => {

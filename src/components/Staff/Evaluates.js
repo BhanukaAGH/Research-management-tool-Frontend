@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import GroupInformation from './evaluates components/GroupInformation'
-import GroupsLists from './evaluates components/GroupsLists'
+import GroupInformation from './evaluatesComponents/GroupInformation'
+import GroupsLists from './evaluatesComponents/GroupsLists'
 
 const Evaluates = () => {
   const [selectGroup, setSelectGroup] = useState(null)
