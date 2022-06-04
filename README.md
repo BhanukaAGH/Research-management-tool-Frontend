@@ -11,4 +11,9 @@ This is a project managment tool built for SLIIT 4th year student to manage thei
 Technologies Used in this project are.<br/>
 FrontEnd-React.js<br/>
 BackEnd- Node.js, Express.js
-Database-NoSQL Databases (MongoDB,Firebase,Cloudinary)
+Database-NoSQL Databases (MongoDB,Firebase,Cloudinary)<br/>
+
+Group Leader-Buddheesha Induwara W.L<br/>
+Member1-K.O.R.P .Karunanayake<br/>
+Member2-Bhanuka A.G.H<br/>
+Member3-W.V.Hasith Kovinda<br/>
