@@ -1,7 +1,7 @@
-# Research-management-tool-Frontend
+# Research-management-tool
 Research Management Tool - Frontend
 
-Deployed Links
+##Deployed Links
 FrontEnd- research-management-tool.netlify.app<br/>
 BackEnd-research-managment-tool.herokuapp.com
 <br/>
