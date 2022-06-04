@@ -8,6 +8,7 @@ import {
   MdKeyboardBackspace,
   MdCheck,
 } from 'react-icons/md'
+import { useSnackbar } from 'notistack'
 import MarkingScheme from './MarkingScheme'
 
 const GroupInformation = ({ selectGroup, setSelectGroup }) => {
@@ -15,10 +16,32 @@ const GroupInformation = ({ selectGroup, setSelectGroup }) => {
   const [evaluateData, setEvaluateData] = useState(null)
 
   const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
     if (!evaluateMark && evaluateData) {
-      dispatch(createEvaluation(evaluateData))
+      const validMarkAllocation = evaluateData.markScheme.reduce(
+        (checkmark, scheme) => {
+          let allocatedMarks = { ...scheme.allocatedMark }[0]
+          let marks = scheme.marks
+          if (checkmark) {
+            if (marks <= allocatedMarks) {
+              checkmark = true
+            } else {
+              checkmark = false
+            }
+          }
+          return checkmark
+        },
+        true
+      )
+      if (validMarkAllocation) {
+        dispatch(createEvaluation(evaluateData))
+      } else {
+        enqueueSnackbar('Please correctly allocated marks.', {
+          variant: 'warning',
+        })
+      }
     }
   }, [evaluateMark])
 
