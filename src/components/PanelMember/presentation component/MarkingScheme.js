@@ -9,6 +9,7 @@ const MarkingScheme = ({ groupId, evaluateMark, setEvaluateData }) => {
   const [markingScheme, setMarkingScheme] = useState(null);
 
   const dispatch = useDispatch();
+  // get the auth from the store
   const { user } = useSelector((state) => state.auth);
   const { evaluate, isLoading, isSuccess } = useSelector(
     (state) => state.evaluate
@@ -27,6 +28,7 @@ const MarkingScheme = ({ groupId, evaluateMark, setEvaluateData }) => {
     return 0;
   };
 
+  // fetch the marking schema from the db according to the group id and the type
   useEffect(() => {
     const data = {
       groupId,
@@ -36,6 +38,7 @@ const MarkingScheme = ({ groupId, evaluateMark, setEvaluateData }) => {
     dispatch(reset());
   }, []);
 
+  //set marking scheme values
   useEffect(() => {
     if (evaluate) {
       setMarkingScheme(
@@ -44,6 +47,7 @@ const MarkingScheme = ({ groupId, evaluateMark, setEvaluateData }) => {
     }
   }, [isSuccess]);
 
+  //calculate the total marks for the scheme
   useEffect(() => {
     const evaluationData = {
       groupId,

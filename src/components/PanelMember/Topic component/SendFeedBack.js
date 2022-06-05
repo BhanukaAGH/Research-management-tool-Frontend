@@ -46,7 +46,13 @@ const SendFeedBack = (props) => {
 
   const controlInput = (e) => {
     e.preventDefault();
-    sendEmail();
+    const { subject, Registration_Number, To_whom, input_message } = values;
+    if (!subject || !Registration_Number || !To_whom || !input_message) {
+      enqueueSnackbar("Please fill out all fields", { variant: "error" });
+      return;
+    } else {
+      sendEmail();
+    }
   };
 
   const sendEmail = async () => {
